@@ -1,0 +1,76 @@
+# Customer Support DAG -- ADK Temporal edition
+# Node types: agent, a2a, mcp
+dag:
+  name: customer_support_adk
+  version: "2.0.0"
+  description: "Route customer requests to the right handler (ADK + Temporal)"
+
+  # Default model for agent nodes (can be overridden per-node)
+  default_model: gemini-3.1-flash-lite
+
+  nodes:
+    - id: classify
+      type: agent
+      model: gemini-3.1-flash-lite
+      instruction: |
+        Classify the customer's request into one of these categories.
+        Reply with ONLY the category name, nothing else:
+        - billing
+        - technical
+        - general
+
+    - id: handle_billing
+      type: agent
+      model: gemini-3.1-flash-lite
+      instruction: |
+        You are a billing specialist. Help the customer with their
+        billing question. Be concise and helpful.
+
+    - id: handle_technical
+      type: agent
+      model: gemini-3.1-flash-lite
+      instruction: |
+        You are a technical support specialist. Help the customer
+        with their technical issue. Be concise and helpful.
+
+    - id: handle_general
+      type: agent
+      model: gemini-3.1-flash-lite
+      instruction: |
+        You are a general customer service agent. Help the customer
+        with their request. Be concise and helpful.
+
+    # -- A2A node example (inactive by default) --
+    # Delegates to an external A2A agent.  The remote agent must expose
+    # /.well-known/agent.json (or a path you specify in `agent_card`).
+    - id: escalate_a2a
+      type: a2a
+      agent_card: "http://localhost:9100/.well-known/agent.json"
+      description: "Escalate to an external specialist agent via A2A"
+
+    # -- MCP node example (inactive by default) --
+    # Calls a tool exposed by an MCP server.
+    - id: lookup_mcp
+      type: mcp
+      command: "npx"
+      args: ["-y", "@anthropic/mcp-server-memory"]
+      description: "Lookup customer info via MCP memory server"
+
+  edges:
+    - from: START
+      to: classify
+    - from: classify
+      to: handle_billing
+      condition: "billing"
+    - from: classify
+      to: handle_technical
+      condition: "technical"
+    - from: classify
+      to: handle_general
+      condition: "general"
+    # Uncomment to wire A2A / MCP nodes into the graph:
+    # - from: handle_billing
+    #   to: escalate_a2a
+    #   condition: "escalate"
+    # - from: handle_technical
+    #   to: lookup_mcp
