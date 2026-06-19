@@ -1,0 +1,74 @@
+dag:
+  name: it_helpdesk
+  version: "1.0.0"
+  description: "Route IT helpdesk requests to specialized handlers"
+
+  default_model: gemini-2.5-flash
+
+  nodes:
+    - id: classify
+      type: agent
+      model: gemini-2.5-flash
+      instruction: |
+        Classify the IT helpdesk request into one of these categories.
+        Reply with ONLY the category name, nothing else:
+        - password-reset
+        - software-install
+        - hardware
+        - network
+
+    - id: handle_password_reset
+      type: agent
+      model: gemini-2.5-flash
+      instruction: |
+        You are an IT helpdesk specialist for password and account access issues.
+        Help the user reset their password, unlock their account, or resolve
+        authentication problems. Provide clear step-by-step instructions.
+        Mention self-service portal options when applicable.
+        Be concise and helpful.
+
+    - id: handle_software_install
+      type: agent
+      model: gemini-2.5-flash
+      instruction: |
+        You are an IT helpdesk specialist for software installation and licensing.
+        Help the user install, update, or troubleshoot software applications.
+        Mention the company software catalog or approval process when relevant.
+        Provide clear steps and mention any prerequisites.
+        Be concise and helpful.
+
+    - id: handle_hardware
+      type: agent
+      model: gemini-2.5-flash
+      instruction: |
+        You are an IT helpdesk specialist for hardware issues.
+        Help the user diagnose and resolve hardware problems with laptops,
+        desktops, monitors, printers, and peripherals. Suggest basic
+        troubleshooting first, then escalation to on-site support if needed.
+        Be concise and helpful.
+
+    - id: handle_network
+      type: agent
+      model: gemini-2.5-flash
+      instruction: |
+        You are an IT helpdesk specialist for network and connectivity issues.
+        Help the user resolve VPN, Wi-Fi, ethernet, DNS, and general
+        network connectivity problems. Provide step-by-step troubleshooting.
+        Mention common fixes like flushing DNS, resetting network adapter,
+        or reconnecting to VPN. Be concise and helpful.
+
+  edges:
+    - from: START
+      to: classify
+    - from: classify
+      to: handle_password_reset
+      condition: "password-reset"
+    - from: classify
+      to: handle_software_install
+      condition: "software-install"
+    - from: classify
+      to: handle_hardware
+      condition: "hardware"
+    - from: classify
+      to: handle_network
+      condition: "network"
