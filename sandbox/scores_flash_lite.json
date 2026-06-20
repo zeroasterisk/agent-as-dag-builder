@@ -1,0 +1,329 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "aggregate_score": 84.98,
+      "total_cases": 58,
+      "harnesses": {
+        "customer_support": {
+          "score": 87.52,
+          "cases": 23,
+          "category_accuracy": 1.0,
+          "avg_quality": 22.83,
+          "avg_helpfulness": 16.87,
+          "category_breakdown": {
+            "": {
+              "avg_score": 87.52,
+              "accuracy": 1.0,
+              "count": 23
+            }
+          }
+        },
+        "it_helpdesk": {
+          "score": 82.22,
+          "cases": 18,
+          "category_accuracy": 1.0,
+          "avg_quality": 18.5,
+          "avg_helpfulness": 13.72,
+          "category_breakdown": {
+            "": {
+              "avg_score": 82.22,
+              "accuracy": 1.0,
+              "count": 18
+            }
+          }
+        },
+        "sales_inquiry": {
+          "score": 84.47,
+          "cases": 17,
+          "category_accuracy": 1.0,
+          "avg_quality": 21.53,
+          "avg_helpfulness": 15.88,
+          "category_breakdown": {
+            "": {
+              "avg_score": 84.47,
+              "accuracy": 1.0,
+              "count": 17
+            }
+          }
+        }
+      }
+    },
+    {
+      "iteration": 2,
+      "aggregate_score": 85.05,
+      "total_cases": 58,
+      "harnesses": {
+        "customer_support": {
+          "score": 88.09,
+          "cases": 23,
+          "category_accuracy": 1.0,
+          "avg_quality": 21.17,
+          "avg_helpfulness": 16.91,
+          "category_breakdown": {
+            "": {
+              "avg_score": 88.09,
+              "accuracy": 1.0,
+              "count": 23
+            }
+          }
+        },
+        "it_helpdesk": {
+          "score": 80.0,
+          "cases": 18,
+          "category_accuracy": 1.0,
+          "avg_quality": 16.22,
+          "avg_helpfulness": 13.78,
+          "category_breakdown": {
+            "": {
+              "avg_score": 80.0,
+              "accuracy": 1.0,
+              "count": 18
+            }
+          }
+        },
+        "sales_inquiry": {
+          "score": 86.29,
+          "cases": 17,
+          "category_accuracy": 1.0,
+          "avg_quality": 21.24,
+          "avg_helpfulness": 15.06,
+          "category_breakdown": {
+            "": {
+              "avg_score": 86.29,
+              "accuracy": 1.0,
+              "count": 17
+            }
+          }
+        }
+      }
+    },
+    {
+      "iteration": 3,
+      "aggregate_score": 82.9,
+      "total_cases": 58,
+      "harnesses": {
+        "customer_support": {
+          "score": 85.3,
+          "cases": 23,
+          "category_accuracy": 1.0,
+          "avg_quality": 19.96,
+          "avg_helpfulness": 15.35,
+          "category_breakdown": {
+            "": {
+              "avg_score": 85.3,
+              "accuracy": 1.0,
+              "count": 23
+            }
+          }
+        },
+        "it_helpdesk": {
+          "score": 75.39,
+          "cases": 18,
+          "category_accuracy": 1.0,
+          "avg_quality": 13.67,
+          "avg_helpfulness": 11.72,
+          "category_breakdown": {
+            "": {
+              "avg_score": 75.39,
+              "accuracy": 1.0,
+              "count": 18
+            }
+          }
+        },
+        "sales_inquiry": {
+          "score": 87.59,
+          "cases": 17,
+          "category_accuracy": 1.0,
+          "avg_quality": 21.94,
+          "avg_helpfulness": 15.65,
+          "category_breakdown": {
+            "": {
+              "avg_score": 87.59,
+              "accuracy": 1.0,
+              "count": 17
+            }
+          }
+        }
+      }
+    },
+    {
+      "iteration": 4,
+      "aggregate_score": 84.31,
+      "total_cases": 58,
+      "harnesses": {
+        "customer_support": {
+          "score": 87.13,
+          "cases": 23,
+          "category_accuracy": 1.0,
+          "avg_quality": 20.17,
+          "avg_helpfulness": 16.96,
+          "category_breakdown": {
+            "billing": {
+              "avg_score": 88.75,
+              "accuracy": 1.0,
+              "count": 8
+            },
+            "technical": {
+              "avg_score": 77.88,
+              "accuracy": 1.0,
+              "count": 8
+            },
+            "general": {
+              "avg_score": 95.86,
+              "accuracy": 1.0,
+              "count": 7
+            }
+          }
+        },
+        "it_helpdesk": {
+          "score": 79.44,
+          "cases": 18,
+          "category_accuracy": 1.0,
+          "avg_quality": 15.67,
+          "avg_helpfulness": 13.78,
+          "category_breakdown": {
+            "password-reset": {
+              "avg_score": 80.0,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "software-install": {
+              "avg_score": 93.2,
+              "accuracy": 1.0,
+              "count": 5
+            },
+            "hardware": {
+              "avg_score": 73.5,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "network": {
+              "avg_score": 70.0,
+              "accuracy": 1.0,
+              "count": 5
+            }
+          }
+        },
+        "sales_inquiry": {
+          "score": 85.65,
+          "cases": 17,
+          "category_accuracy": 1.0,
+          "avg_quality": 20.35,
+          "avg_helpfulness": 15.29,
+          "category_breakdown": {
+            "pricing": {
+              "avg_score": 84.75,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "features": {
+              "avg_score": 92.8,
+              "accuracy": 1.0,
+              "count": 5
+            },
+            "demo-request": {
+              "avg_score": 95.0,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "competitor-comparison": {
+              "avg_score": 68.25,
+              "accuracy": 1.0,
+              "count": 4
+            }
+          }
+        }
+      }
+    },
+    {
+      "iteration": 5,
+      "aggregate_score": 85.52,
+      "total_cases": 58,
+      "harnesses": {
+        "customer_support": {
+          "score": 87.78,
+          "cases": 23,
+          "category_accuracy": 1.0,
+          "avg_quality": 21.48,
+          "avg_helpfulness": 16.3,
+          "category_breakdown": {
+            "billing": {
+              "avg_score": 91.88,
+              "accuracy": 1.0,
+              "count": 8
+            },
+            "technical": {
+              "avg_score": 75.62,
+              "accuracy": 1.0,
+              "count": 8
+            },
+            "general": {
+              "avg_score": 97.0,
+              "accuracy": 1.0,
+              "count": 7
+            }
+          }
+        },
+        "it_helpdesk": {
+          "score": 79.83,
+          "cases": 18,
+          "category_accuracy": 1.0,
+          "avg_quality": 15.94,
+          "avg_helpfulness": 13.89,
+          "category_breakdown": {
+            "password-reset": {
+              "avg_score": 76.0,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "software-install": {
+              "avg_score": 94.6,
+              "accuracy": 1.0,
+              "count": 5
+            },
+            "hardware": {
+              "avg_score": 75.5,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "network": {
+              "avg_score": 71.6,
+              "accuracy": 1.0,
+              "count": 5
+            }
+          }
+        },
+        "sales_inquiry": {
+          "score": 88.47,
+          "cases": 17,
+          "category_accuracy": 1.0,
+          "avg_quality": 22.24,
+          "avg_helpfulness": 16.24,
+          "category_breakdown": {
+            "pricing": {
+              "avg_score": 96.75,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "features": {
+              "avg_score": 93.0,
+              "accuracy": 1.0,
+              "count": 5
+            },
+            "demo-request": {
+              "avg_score": 88.75,
+              "accuracy": 1.0,
+              "count": 4
+            },
+            "competitor-comparison": {
+              "avg_score": 74.25,
+              "accuracy": 1.0,
+              "count": 4
+            }
+          }
+        }
+      }
+    }
+  ]
+}
