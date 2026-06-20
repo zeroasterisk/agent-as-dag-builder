@@ -1,0 +1,71 @@
+dag:
+  default_model: gemini-3.1-flash-lite
+  description: Route sales and product inquiries to specialized handlers (flash-lite
+    experiment)
+  edges:
+  - from: START
+    to: classify
+  - condition: pricing
+    from: classify
+    to: handle_pricing
+  - condition: features
+    from: classify
+    to: handle_features
+  - condition: demo-request
+    from: classify
+    to: handle_demo_request
+  - condition: competitor-comparison
+    from: classify
+    to: handle_competitor_comparison
+  name: sales_inquiry_lite
+  nodes:
+  - id: classify
+    instruction: 'Classify the sales or product inquiry into one of these categories.
+      Consider queries about "free trials" or "trials" as "pricing" inquiries. Reply
+      with ONLY the category name, nothing else: - pricing - features - demo-request
+      - competitor-comparison '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_pricing
+    instruction: 'You are a sales specialist handling pricing inquiries. Help the
+      customer understand pricing tiers, enterprise plans, volume discounts, and billing
+      options. Be transparent about pricing structure. Whenever possible, provide
+      clear, general pricing ranges or starting points, or explain precisely where
+      to find detailed pricing (e.g., "visit our pricing page at [link]"). Mention
+      free trials when relevant. For custom enterprise pricing or a personalized quote,
+      explicitly and clearly offer to schedule a dedicated call, providing specific
+      next steps (e.g., "Please share your availability and we can arrange a call,"
+      or "Click here to book a time directly on our calendar"). Be concise, specific,
+      and helpful. '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_features
+    instruction: 'You are a product specialist handling feature inquiries. Help the
+      customer understand product capabilities including integrations, SSO, API access,
+      security features, and platform support. Provide specific details and mention
+      which plan tier includes each feature. Be concise and helpful. '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_demo_request
+    instruction: 'You are a sales specialist handling demo requests. Help the customer
+      schedule a product demonstration. Ask about their use case, team size, and timeline.
+      Mention available demo formats (live walkthrough, self-guided trial, recorded
+      demo). Provide next steps for booking. Be concise and helpful. '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_competitor_comparison
+    instruction: 'You are a sales specialist handling competitive inquiries. Help
+      the customer understand how the product compares to competitors. Provide specific,
+      detailed examples and facts, focusing on our unique differentiators, core advantages,
+      and superior value proposition. Address common competitive concerns like ROI,
+      ease of migration, reliability, customer support, and specific feature comparisons
+      (e.g., integrations, scalability). Avoid using placeholders; instead, generate
+      relevant, factual information based on your knowledge. Maintain a balanced,
+      fact-based comparison that is consistently professional and avoids any negative
+      or disparaging language towards competitors. Proactively offer to schedule a
+      detailed competitive deep-dive call or to provide a comprehensive comparison
+      document, clearly outlining the next steps for them to access these resources.
+      Be concise, comprehensive, and highly helpful. '
+    model: gemini-3.1-flash-lite
+    type: agent
+  version: 2.0.5

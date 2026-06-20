@@ -1,0 +1,72 @@
+dag:
+  default_model: gemini-2.5-flash
+  description: Route customer requests to the right handler (ADK + Temporal)
+  edges:
+  - from: START
+    to: classify
+  - condition: billing
+    from: classify
+    to: handle_billing
+  - condition: technical
+    from: classify
+    to: handle_technical
+  - condition: general
+    from: classify
+    to: handle_general
+  name: customer_support_adk
+  nodes:
+  - id: classify
+    instruction: "Classify the customer's request into exactly one of these categories.\n\
+      Reply with ONLY the category name on a single line, nothing else.\n\nCategories:\n\
+      - billing: anything about charges, payments, refunds, invoices,\n  subscriptions,\
+      \ cancellations, pricing, discounts, making specific changes to an existing\
+      \ plan (e.g., processing a chosen upgrade, downgrade, or plan tier adjustment),\
+      \ credit card updates, or billing dates\n- technical: anything about bugs, errors,\
+      \ connectivity, passwords,\n  login issues, app crashes, slow performance, or\
+      \ device problems\n- general: anything about business hours, contact info, feedback,\n\
+      \  referral programs, information about available services or plans (including\
+      \ general inquiries about upgrade options, even for existing customers), or\
+      \ general questions\n\nIMPORTANT: subscription cancellations and plan discount\
+      \ questions\nare BILLING, not general.\n"
+    model: gemini-2.5-flash
+    type: agent
+  - id: handle_billing
+    instruction: 'You are a billing specialist. Help the customer with their billing
+      question including charges, refunds, subscription management, cancellations,
+      payment methods, plan changes or upgrades, and pricing. Always aim to proactively
+      explain relevant policies (e.g., refund policy, plan change terms, billing cycles)
+      and clearly outline the next steps or required information to resolve their
+      query. Be concise, empathetic, and helpful, and guide the customer effectively
+      towards a resolution. '
+    model: gemini-2.5-flash
+    type: agent
+  - id: handle_technical
+    instruction: 'You are a technical support specialist. Help the customer with their
+      technical issue. Provide step-by-step troubleshooting. For login issues, always
+      include steps for password reset, checking for correct username/email, and confirming
+      account existence or activation status. Be concise and helpful. '
+    model: gemini-2.5-flash
+    type: agent
+  - id: handle_general
+    instruction: 'You are a general customer service agent. Help the customer with
+      their request about services, hours, programs, and general inquiries. Always
+      provide specific, factual information or clear, actionable directions to find
+      it (e.g., website links, phone numbers, email addresses). When asked about services,
+      plans, or upgrade options, clearly describe the key features, benefits, and
+      pricing tiers available, and directly answer comparative questions without requiring
+      the customer to navigate external resources for basic comparisons. Do not provide
+      placeholder text or vague acknowledgements. Be concise and helpful. '
+    model: gemini-2.5-flash
+    type: agent
+  - agent_card: http://localhost:9100/.well-known/agent.json
+    description: Escalate to an external specialist agent via A2A
+    id: escalate_a2a
+    type: a2a
+  - args:
+    - -y
+    - '@anthropic/mcp-server-memory'
+    command: npx
+    description: Lookup customer info via MCP memory server
+    id: lookup_mcp
+    type: mcp
+  version: 2.0.6

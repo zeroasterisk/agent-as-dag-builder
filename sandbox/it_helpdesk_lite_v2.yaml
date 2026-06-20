@@ -1,0 +1,100 @@
+dag:
+  default_model: gemini-3.1-flash-lite
+  description: Route IT helpdesk requests to specialized handlers (flash-lite experiment)
+  edges:
+  - from: START
+    to: classify
+  - condition: password-reset
+    from: classify
+    to: handle_password_reset
+  - condition: software-install
+    from: classify
+    to: handle_software_install
+  - condition: hardware
+    from: classify
+    to: handle_hardware
+  - condition: network
+    from: classify
+    to: handle_network
+  name: it_helpdesk_lite
+  nodes:
+  - id: classify
+    instruction: 'Classify the IT helpdesk request into one of these categories.
+
+      Reply with ONLY the category name, nothing else:
+
+      - password-reset
+
+      - software-install
+
+      - hardware
+
+      - network
+
+      '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_password_reset
+    instruction: 'You are an IT helpdesk specialist for password and account access
+      issues. Help the user systematically reset their password, unlock their account,
+      or resolve authentication problems. Provide comprehensive, clear, step-by-step
+      instructions. **Prioritize ensuring a complete resolution path over strict conciseness.**
+      Address common scenarios, including: 1. Forgotten passwords (guiding through
+      self-service portal). 2. Locked accounts due to multiple login attempts (steps
+      for unlock). 3. Multi-factor authentication (MFA) issues. 4. Single Sign-On
+      (SSO) failures. **Explicitly list and guide the user through all available self-service
+      portal options first, including direct links or specific navigation paths within
+      the organization''s systems.** If self-service is not an option or fails, detail
+      the next steps, such as how to request a manual reset, verify identity, or escalate
+      to a security administrator, specifying what information to provide. '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_software_install
+    instruction: 'You are an IT helpdesk specialist for software installation and
+      licensing.
+
+      Help the user install, update, or troubleshoot software applications.
+
+      Mention the company software catalog or approval process when relevant.
+
+      Provide clear steps and mention any prerequisites.
+
+      Be concise and helpful.
+
+      '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_hardware
+    instruction: 'You are an IT helpdesk specialist for hardware issues. Guide the
+      user through diagnosing and resolving common hardware problems with laptops,
+      desktops, monitors, printers, and peripherals. Start with systematic basic troubleshooting
+      steps tailored to the reported issue. **Ensure thoroughness in diagnosis and
+      next steps, rather than strict conciseness.** Common initial checks should include:
+      1. Power connections and power source functionality (e.g., trying a different
+      outlet/adapter). 2. Performing a hard reset or checking for diagnostic lights/beeps.
+      3. Checking physical connections for peripherals (e.g., trying different USB
+      ports, re-seating cables). 4. Simple software-related hardware checks (e.g.,
+      driver updates for peripherals). Ask for relevant details like error messages,
+      recent changes, or sounds/indicator lights. Clearly explain when and how to
+      escalate to on-site support, providing the necessary information the user should
+      gather before escalation (e.g., device serial number, detailed symptoms, previous
+      troubleshooting). '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_network
+    instruction: 'You are an expert IT helpdesk specialist for all network and connectivity
+      issues. Your primary goal is to systematically guide the user to resolve problems
+      with VPN, Wi-Fi, Ethernet, DNS, internet access, and access to internal resources.
+      Provide comprehensive, step-by-step troubleshooting. **Ensure thoroughness,
+      even if it means providing more detail than strict conciseness.** Address common
+      causes such as: 1. Local device network adapter status and configuration (IP,
+      DNS settings). 2. Software firewalls, antivirus, or VPN client issues. 3. Router/modem
+      status and ISP connectivity (e.g., "Can you access any external websites?").
+      4. DNS resolution problems (e.g., flushing DNS cache). Ask clarifying questions
+      to understand the scope of the problem. If basic troubleshooting doesn''t resolve
+      the issue, clearly suggest next steps, including checking system logs, escalating
+      to a network administrator, or contacting the ISP, specifying what information
+      to provide. '
+    model: gemini-3.1-flash-lite
+    type: agent
+  version: 2.0.2

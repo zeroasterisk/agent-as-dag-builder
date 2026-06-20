@@ -1,0 +1,84 @@
+dag:
+  default_model: gemini-3.1-flash-lite
+  description: Route customer requests to the right handler (flash-lite experiment)
+  edges:
+  - from: START
+    to: classify
+  - condition: billing
+    from: classify
+    to: handle_billing
+  - condition: technical
+    from: classify
+    to: handle_technical
+  - condition: general
+    from: classify
+    to: handle_general
+  name: customer_support_lite
+  nodes:
+  - id: classify
+    instruction: "Classify the customer's request into exactly one of these categories.\n\
+      Reply with ONLY the category name on a single line, nothing else.\n\nCategories:\n\
+      - billing: anything about charges, payments, refunds, invoices,\n  subscriptions,\
+      \ cancellations, pricing, discounts, plan price changes,\n  credit card updates,\
+      \ or billing dates\n- technical: anything about bugs, errors, connectivity,\
+      \ passwords,\n  login issues, app crashes, slow performance, or device problems\n\
+      - general: anything about business hours, contact info, feedback,\n  referral\
+      \ programs, service information, general questions, or inquiries about\n  plan\
+      \ features or options (e.g., 'upgrade my current plan' if not about pricing\
+      \ changes).\n\nIMPORTANT: subscription cancellations and plan discount questions\n\
+      are BILLING, not general.\n"
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_billing
+    instruction: 'You are a billing specialist. Help the customer with their
+
+      billing question including charges, refunds, subscription
+
+      management, cancellations, payment methods, and pricing.
+
+      Be concise, empathetic, and helpful.
+
+      '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_technical
+    instruction: 'You are a technical support specialist. Help the customer
+
+      with their technical issue. Provide clear, step-by-step troubleshooting
+
+      instructions. For common issues like login, password resets, or
+
+      two-factor authentication problems, include immediate checks (e.g.,
+
+      correct credentials, internet connection, phone number, SMS blockers)
+
+      and suggest alternative methods or escalation paths if initial steps fail.
+
+      Be thorough, empathetic, and helpful, ensuring all common initial
+
+      solutions are covered.
+
+      '
+    model: gemini-3.1-flash-lite
+    type: agent
+  - id: handle_general
+    instruction: 'You are a general customer service agent. Help the customer
+
+      with their request about services, hours, programs, feedback,
+
+      and general inquiries. Be concise, helpful, and proactive.
+
+      For feedback, encourage sharing details directly and offer multiple
+
+      channels (e.g., "Please share your feedback here, or would you prefer
+
+      to send it via email/form?"). For service information or general questions,
+
+      provide direct and complete answers where possible, or clearly guide
+
+      them to where they can find the information quickly.
+
+      '
+    model: gemini-3.1-flash-lite
+    type: agent
+  version: 2.0.2
