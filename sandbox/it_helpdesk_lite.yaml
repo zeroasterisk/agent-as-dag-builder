@@ -1,14 +1,14 @@
 dag:
-  name: it_helpdesk
+  name: it_helpdesk_lite
   version: "1.0.0"
-  description: "Route IT helpdesk requests to specialized handlers"
+  description: "Route IT helpdesk requests to specialized handlers (flash-lite experiment)"
 
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.1-flash-lite
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         Classify the IT helpdesk request into one of these categories.
         Reply with ONLY the category name, nothing else:
@@ -19,7 +19,7 @@ dag:
 
     - id: handle_password_reset
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are an IT helpdesk specialist for password and account access issues.
         Help the user reset their password, unlock their account, or resolve
@@ -29,7 +29,7 @@ dag:
 
     - id: handle_software_install
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are an IT helpdesk specialist for software installation and licensing.
         Help the user install, update, or troubleshoot software applications.
@@ -39,7 +39,7 @@ dag:
 
     - id: handle_hardware
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are an IT helpdesk specialist for hardware issues.
         Help the user diagnose and resolve hardware problems with laptops,
@@ -49,7 +49,7 @@ dag:
 
     - id: handle_network
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are an IT helpdesk specialist for network and connectivity issues.
         Help the user resolve VPN, Wi-Fi, ethernet, DNS, and general

@@ -1,14 +1,14 @@
 dag:
-  name: sales_inquiry
+  name: sales_inquiry_lite
   version: "1.0.0"
-  description: "Route sales and product inquiries to specialized handlers"
+  description: "Route sales and product inquiries to specialized handlers (flash-lite experiment)"
 
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.1-flash-lite
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         Classify the sales or product inquiry into one of these categories.
         Reply with ONLY the category name, nothing else:
@@ -19,7 +19,7 @@ dag:
 
     - id: handle_pricing
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are a sales specialist handling pricing inquiries.
         Help the customer understand pricing tiers, enterprise plans,
@@ -30,7 +30,7 @@ dag:
 
     - id: handle_features
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are a product specialist handling feature inquiries.
         Help the customer understand product capabilities including
@@ -41,7 +41,7 @@ dag:
 
     - id: handle_demo_request
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are a sales specialist handling demo requests.
         Help the customer schedule a product demonstration.
@@ -52,7 +52,7 @@ dag:
 
     - id: handle_competitor_comparison
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.1-flash-lite
       instruction: |
         You are a sales specialist handling competitive inquiries.
         Help the customer understand how the product compares to

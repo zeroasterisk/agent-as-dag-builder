@@ -1,13 +1,17 @@
-"""Prototype 11: Multi-Harness Benchmark + Learning Loop with Regression Gates.
+"""Prototype 12: Flash-Lite Experiment (H3 Hypothesis Test).
 
-Runs multiple domain harnesses (customer support, IT helpdesk, sales inquiry)
-through a benchmark, scores responses with LLM-as-judge, proposes per-harness
-improvements, and enforces regression gates before promoting.
+Tests whether a weaker model (gemini-3.1-flash-lite) exposes more learning
+opportunities -- i.e., the learning loop should achieve LARGER improvement
+deltas because the ceiling is lower.
+
+DAG agents: gemini-3.1-flash-lite (the subject under test)
+Judge/scoring: gemini-2.5-flash (reliable scoring)
+Learning loop: gemini-2.5-flash (reliable proposals)
 
 Usage:
-    python sandbox/11_multi_harness.py                    # Run 3 iterations
-    python sandbox/11_multi_harness.py --iterations 5     # Run 5 iterations
-    python sandbox/11_multi_harness.py --reset            # Reset all versioned YAMLs
+    python sandbox/12_flash_lite_experiment.py                    # Run 5 iterations
+    python sandbox/12_flash_lite_experiment.py --iterations 5     # Run 5 iterations
+    python sandbox/12_flash_lite_experiment.py --reset            # Reset all versioned YAMLs
 
 Environment:
     GOOGLE_GENAI_USE_VERTEXAI=1
@@ -42,14 +46,15 @@ os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
 from google import genai
 
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
-logger = logging.getLogger("multi_harness")
+logger = logging.getLogger("flash_lite_experiment")
 
 SANDBOX_DIR = Path(__file__).parent
-JUDGE_MODEL = "gemini-3.5-flash"
-SCORES_FILE = SANDBOX_DIR / "scores.json"
+JUDGE_MODEL = "gemini-2.5-flash"
+DAG_MODEL = "gemini-3.1-flash-lite"  # Weaker model for DAG agents (H3 hypothesis)
+SCORES_FILE = SANDBOX_DIR / "scores_flash_lite.json"
 
 # Rate-limit delay between LLM calls (seconds)
-LLM_DELAY = 0.5
+LLM_DELAY = 0.3
 
 
 # =============================================================================
@@ -200,17 +205,17 @@ SALES_INQUIRY_CASES = [
 HARNESSES = [
     {
         "name": "customer_support",
-        "yaml": "customer_support_adk.yaml",
+        "yaml": "customer_support_lite.yaml",
         "cases": CUSTOMER_SUPPORT_CASES,
     },
     {
         "name": "it_helpdesk",
-        "yaml": "it_helpdesk.yaml",
+        "yaml": "it_helpdesk_lite.yaml",
         "cases": IT_HELPDESK_CASES,
     },
     {
         "name": "sales_inquiry",
-        "yaml": "sales_inquiry.yaml",
+        "yaml": "sales_inquiry_lite.yaml",
         "cases": SALES_INQUIRY_CASES,
     },
 ]
@@ -275,7 +280,7 @@ async def run_dag_query(
     """Execute a single query through the DAG and return detailed results."""
     nodes_by_id = {n["id"]: n for n in config["nodes"]}
     routing = build_routing(config)
-    default_model = config.get("default_model", "gemini-3.5-flash")
+    default_model = config.get("default_model", DAG_MODEL)
     valid_categories = extract_categories_from_config(config)
 
     results = {
@@ -677,7 +682,7 @@ Rules:
 - Keep all existing node IDs unless renaming is necessary
 - Update instructions to be more specific and detailed based on proposals
 - Keep the same edge structure unless adding new nodes/routes
-- Keep model as gemini-3.5-flash for all nodes
+- Keep model as gemini-3.1-flash-lite for all nodes
 - Update the version to "2.0.{iteration}"
 - Keep nodes of type 'agent' only
 - IMPORTANT: Keep the classify node's instruction format so it outputs
@@ -1182,9 +1187,9 @@ async def run_multi_harness_loop(
 def reset_all():
     """Remove all versioned DAG configs for all harnesses."""
     patterns = [
-        "customer_support_adk_v*.yaml",
-        "it_helpdesk_v*.yaml",
-        "sales_inquiry_v*.yaml",
+        "customer_support_lite_v*.yaml",
+        "it_helpdesk_lite_v*.yaml",
+        "sales_inquiry_lite_v*.yaml",
     ]
     removed = []
     for pattern in patterns:
@@ -1207,13 +1212,13 @@ def reset_all():
 
 async def main():
     parser = argparse.ArgumentParser(
-        description="Multi-Harness Benchmark + Learning Loop with Regression Gates"
+        description="Flash-Lite Experiment: H3 Hypothesis Test (weaker model = larger deltas)"
     )
     parser.add_argument(
         "--iterations",
         type=int,
-        default=3,
-        help="Number of benchmark iterations (default: 3)",
+        default=5,
+        help="Number of benchmark iterations (default: 5)",
     )
     parser.add_argument(
         "--reset",
@@ -1239,7 +1244,10 @@ async def main():
 
     total_cases = sum(len(h["cases"]) for h in HARNESSES)
     print("=" * 70)
-    print("Multi-Harness Benchmark + Learning Loop")
+    print("Flash-Lite Experiment: H3 Hypothesis Test")
+    print("  DAG model:      gemini-3.1-flash-lite (weaker = more room to improve)")
+    print("  Judge model:    gemini-2.5-flash (reliable scoring)")
+    print("  Learning model: gemini-2.5-flash (reliable proposals)")
     print("=" * 70)
     print(f"Harnesses: {len(HARNESSES)}")
     for h in HARNESSES:
@@ -1247,6 +1255,7 @@ async def main():
     print(f"Total cases per iteration: {total_cases}")
     print(f"Iterations: {args.iterations}")
     print(f"Judge model: {JUDGE_MODEL}")
+    print(f"DAG model: {DAG_MODEL}")
     print(f"Regression tolerance: {REGRESSION_TOLERANCE} points")
     print(f"Estimated LLM calls: ~{total_cases * 3 * args.iterations + len(HARNESSES) * 2 * (args.iterations - 1)} (dag + 2x judge + learning)")
 
