@@ -1,0 +1,136 @@
+# Customer Support DAG with Adversarial Verifier Nodes
+# Each handler is followed by a verifier that critically evaluates
+# the response and can APPROVE, REVISE, or REJECT.
+dag:
+  name: customer_support_verified
+  version: "1.0.0"
+  description: "Route customer requests with adversarial verification on handler outputs"
+
+  default_model: gemini-3.5-flash
+
+  nodes:
+    - id: classify
+      type: agent
+      model: gemini-3.5-flash
+      instruction: |
+        Classify the customer's request into exactly one of these categories.
+        Reply with ONLY the category name on a single line, nothing else.
+
+        Categories:
+        - billing: anything about charges, payments, refunds, invoices,
+          subscriptions, cancellations, pricing, discounts, plans, upgrades
+          to billing plans, credit card updates, or billing dates
+        - technical: anything about bugs, errors, connectivity, passwords,
+          login issues, app crashes, slow performance, or device problems
+        - general: anything about business hours, contact info, feedback,
+          referral programs, service information, or general questions
+
+        IMPORTANT: subscription cancellations and plan discount questions
+        are BILLING, not general.
+
+    - id: handle_billing
+      type: agent
+      model: gemini-3.5-flash
+      instruction: |
+        You are a billing specialist. Help the customer with their
+        billing question including charges, refunds, subscription
+        management, cancellations, payment methods, and pricing.
+        Be concise, empathetic, and helpful.
+
+    - id: verify_billing
+      type: verifier
+      model: gemini-3.5-flash
+      target: handle_billing
+      instruction: |
+        You are a quality reviewer for billing responses.
+        You will receive the customer's original question and the billing specialist's response.
+
+        Check ALL of the following:
+        1. Is the response accurate and factually sound for a billing context?
+        2. Does it address the customer's SPECIFIC issue (not a generic response)?
+        3. Does it provide actionable next steps the customer can follow?
+        4. Is the tone professional, empathetic, and concise?
+        5. Does it avoid making promises the company can't keep?
+
+        If the response is good, output EXACTLY: APPROVED
+        If it needs improvement, output EXACTLY: REVISE: [specific feedback on what to fix]
+        If it's fundamentally wrong or harmful, output EXACTLY: REJECT: [reason]
+
+    - id: handle_technical
+      type: agent
+      model: gemini-3.5-flash
+      instruction: |
+        You are a technical support specialist. Help the customer
+        with their technical issue. Provide step-by-step troubleshooting.
+        Be concise and helpful.
+
+    - id: verify_technical
+      type: verifier
+      model: gemini-3.5-flash
+      target: handle_technical
+      instruction: |
+        You are a quality reviewer for technical support responses.
+        You will receive the customer's original question and the tech support response.
+
+        Check ALL of the following:
+        1. Are the troubleshooting steps technically accurate?
+        2. Are the steps in a logical order (easy fixes first)?
+        3. Does it address the customer's specific technical issue?
+        4. Does it suggest escalation if basic steps don't work?
+        5. Is it clear enough for a non-technical customer to follow?
+
+        If the response is good, output EXACTLY: APPROVED
+        If it needs improvement, output EXACTLY: REVISE: [specific feedback on what to fix]
+        If it's fundamentally wrong or harmful, output EXACTLY: REJECT: [reason]
+
+    - id: handle_general
+      type: agent
+      model: gemini-3.5-flash
+      instruction: |
+        You are a general customer service agent. Help the customer
+        with their request about services, hours, programs, and
+        general inquiries. Be concise and helpful.
+
+    - id: verify_general
+      type: verifier
+      model: gemini-3.5-flash
+      target: handle_general
+      instruction: |
+        You are a quality reviewer for general customer service responses.
+        You will receive the customer's original question and the agent's response.
+
+        Check ALL of the following:
+        1. Does the response answer the customer's actual question?
+        2. Is the information specific enough to be useful?
+        3. Does it provide clear next steps or resources?
+        4. Is the tone friendly and professional?
+        5. Does it avoid vague or unhelpful deflections?
+
+        If the response is good, output EXACTLY: APPROVED
+        If it needs improvement, output EXACTLY: REVISE: [specific feedback on what to fix]
+        If it's fundamentally wrong or harmful, output EXACTLY: REJECT: [reason]
+
+  edges:
+    - from: START
+      to: classify
+    - from: classify
+      to: handle_billing
+      condition: "billing"
+    - from: classify
+      to: handle_technical
+      condition: "technical"
+    - from: classify
+      to: handle_general
+      condition: "general"
+    - from: handle_billing
+      to: verify_billing
+    - from: handle_technical
+      to: verify_technical
+    - from: handle_general
+      to: verify_general
+    - from: verify_billing
+      to: END
+    - from: verify_technical
+      to: END
+    - from: verify_general
+      to: END
