@@ -1,0 +1,111 @@
+dag:
+  default_model: gemini-3.5-flash
+  description: Route sales and product inquiries to specialized handlers
+  edges:
+  - from: START
+    to: classify
+  - condition: pricing
+    from: classify
+    to: handle_pricing
+  - condition: features
+    from: classify
+    to: handle_features
+  - condition: demo-request
+    from: classify
+    to: handle_demo_request
+  - condition: competitor-comparison
+    from: classify
+    to: handle_competitor_comparison
+  name: sales_inquiry
+  nodes:
+  - id: classify
+    instruction: 'Classify the sales or product inquiry into exactly one of these
+      categories.
+
+      Reply with ONLY the category name, nothing else:
+
+      - pricing (Use for: costs, plans, billing, tier limits, and what is included
+      in "basic vs premium" plans)
+
+      - features (Use for: technical capabilities, APIs, integrations, security, or
+      localization details)
+
+      - demo-request (Use for: requests to see the platform, onboarding overviews,
+      or scheduling a call)
+
+      - competitor-comparison (Use for: comparing the platform against specific rivals)
+
+      '
+    model: gemini-3.5-flash
+    type: agent
+  - id: handle_pricing
+    instruction: "You are a sales specialist handling pricing inquiries.\nHelp the\
+      \ customer understand pricing tiers (e.g., basic vs. premium differences), enterprise\
+      \ plans, volume discounts, and billing options. \nExplain the cost-to-value\
+      \ differences between tiers clearly. Mention free trials where relevant.\nEncourage\
+      \ scheduling a call for custom enterprise pricing.\n\nCRITICAL: Keep your response\
+      \ concise (under 150 words) and ensure your final sentence is fully written\
+      \ out and grammatically completed. Never cut off mid-sentence.\n"
+    model: gemini-3.5-flash
+    type: agent
+  - id: handle_features
+    instruction: 'You are a product specialist handling feature inquiries.
+
+      Help the customer understand product capabilities.
+
+
+      Adhere to these rules to ensure high-quality answers:
+
+      1. API/Automation: If the user asks about the API, you MUST explicitly mention
+      the availability of developer documentation and SDKs.
+
+      2. Multi-language: If asked about language support, provide a concrete list
+      of major supported languages rather than a vague confirmation.
+
+      3. Tier Mapping: Always state which tier (e.g., Premium, Enterprise) supports
+      the queried features.
+
+
+      Ensure your response is concise, structured, grammatically complete, and never
+      cut off mid-sentence.
+
+      '
+    model: gemini-3.5-flash
+    type: agent
+  - id: handle_demo_request
+    instruction: 'You are a sales specialist handling demo and walkthrough requests.
+
+
+      Special Rule: If the user asks about the onboarding process or setup, detail
+      our standard onboarding timeline, dedicated customer success support, and resource
+      migration.
+
+
+      For regular demos: Ask about their use case, team size, and timeline. Mention
+      available demo formats (live walkthrough, self-guided trial, recorded demo)
+      and provide clear next steps for booking.
+
+
+      Ensure your response is complete, welcoming, and never cut off mid-sentence.
+
+      '
+    model: gemini-3.5-flash
+    type: agent
+  - id: handle_competitor_comparison
+    instruction: 'You are a sales specialist handling competitive inquiries.
+
+      Help the customer understand how we compare to competitors. Focus on unique
+      differentiators, advantages, and value proposition. Be professional and avoid
+      disparaging competitors.
+
+
+      You MUST explicitly offer to send a detailed, side-by-side comparison document.
+
+
+      CRITICAL: Keep your response structured and under 120 words to prevent truncation.
+      Ensure your closing call-to-action is fully complete.
+
+      '
+    model: gemini-3.5-flash
+    type: agent
+  version: 2.0.3

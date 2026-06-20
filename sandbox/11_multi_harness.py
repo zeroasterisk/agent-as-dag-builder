@@ -1,8 +1,14 @@
-"""Prototype 11: Multi-Harness Benchmark + Learning Loop with Regression Gates.
+"""Prototype 11: Multi-Harness Benchmark + Learning Loop with Conservative Optimization.
 
 Runs multiple domain harnesses (customer support, IT helpdesk, sales inquiry)
 through a benchmark, scores responses with LLM-as-judge, proposes per-harness
-improvements, and enforces regression gates before promoting.
+improvements, and uses conservative optimization to prevent score degradation.
+
+Conservative optimization strategy:
+  A. Best-config tracking -- always optimize from best-ever, not latest
+  B. Stability zone -- don't modify harnesses within 1.5 pts of their best
+  C. One-at-a-time -- only modify the single weakest harness per iteration
+  D. Rollback -- if aggregate drops >2 pts below best, rollback all to best
 
 Usage:
     python sandbox/11_multi_harness.py                    # Run 3 iterations
@@ -49,7 +55,11 @@ JUDGE_MODEL = "gemini-3.5-flash"
 SCORES_FILE = SANDBOX_DIR / "scores.json"
 
 # Rate-limit delay between LLM calls (seconds)
-LLM_DELAY = 0.5
+LLM_DELAY = 0.3
+
+# Conservative optimization thresholds
+STABILITY_THRESHOLD = 1.5   # Don't modify a harness within this many pts of its best
+ROLLBACK_THRESHOLD = 2.0    # Rollback all configs if aggregate drops more than this below best
 
 
 # =============================================================================
@@ -946,7 +956,14 @@ async def run_multi_harness_loop(
     resume: bool = False,
     start_iter: int | None = None,
 ) -> None:
-    """Run the full multi-harness benchmark + learning loop."""
+    """Run the full multi-harness benchmark + conservative learning loop.
+
+    Conservative optimization strategy:
+      A. Best-config tracking -- always optimize from best-ever config, not latest
+      B. Stability zone -- skip harnesses within STABILITY_THRESHOLD of their best
+      C. One-at-a-time -- only modify the single weakest harness per iteration
+      D. Rollback -- if aggregate drops >ROLLBACK_THRESHOLD below best, restore all
+    """
     client = genai.Client(
         vertexai=True,
         project=os.environ.get("GOOGLE_CLOUD_PROJECT", "alanblount-demo"),
@@ -954,65 +971,25 @@ async def run_multi_harness_loop(
     )
 
     all_iterations: list[IterationResult] = []
-    promotion_log: list[dict] = []  # Track promotions/rejections per iteration
+    promotion_log: list[dict] = []  # Track promotions/rejections/rollbacks per iteration
 
-    # Determine starting iteration
-    actual_start = 1
-    if resume or start_iter:
-        saved = _load_saved_scores()
-        if saved:
-            # Reconstruct lightweight IterationResult objects from saved data
-            for entry in saved:
-                it = IterationResult(iteration=entry["iteration"])
-                for hname, hdata in entry["harnesses"].items():
-                    hr = HarnessResult(
-                        harness_name=hname,
-                        iteration=entry["iteration"],
-                        config_path="(resumed)",
-                    )
-                    # Create minimal InteractionRecord stubs for score tracking
-                    for _ in range(hdata["cases"]):
-                        # Distribute scores proportionally
-                        avg_score = hdata["score"]
-                        rec = InteractionRecord(
-                            query="(resumed)",
-                            case_id=0,
-                            expected_category="",
-                            actual_category="",
-                            response="",
-                            score={
-                                "total_score": avg_score,
-                                "category_score": 50 if hdata["category_accuracy"] > 0.5 else 0,
-                                "quality_score": hdata["avg_quality"],
-                                "helpfulness_score": hdata["avg_helpfulness"],
-                            },
-                            quality_criteria="",
-                        )
-                        hr.records.append(rec)
-                    it.harness_results[hname] = hr
-                all_iterations.append(it)
-                promotion_log.append({
-                    "iteration": entry["iteration"],
-                    "gate_passed": True,
-                    "promoted": entry["iteration"] > 1,
-                })
-
-            actual_start = len(saved) + 1
-            if start_iter and start_iter > actual_start:
-                actual_start = start_iter
-            print(f"\nResuming from iteration {actual_start} (loaded {len(saved)} previous iterations)")
-            for entry in saved:
-                print(f"  Iter {entry['iteration']}: aggregate={entry['aggregate_score']}")
+    # -- Best-config tracking (A) --
+    # Stores the actual YAML content (not filename) of the best-ever config per harness
+    best_config_content: dict[str, str] = {}   # harness_name -> YAML string
+    best_harness_score: dict[str, float] = {}  # harness_name -> best score
+    best_aggregate_score: float = 0.0
 
     # Track current config path per harness
     current_configs: dict[str, Path] = {}
     for h in HARNESSES:
-        if resume or start_iter:
-            current_configs[h["name"]] = _find_latest_config(h)
-        else:
-            current_configs[h["name"]] = SANDBOX_DIR / h["yaml"]
+        base_path = SANDBOX_DIR / h["yaml"]
+        current_configs[h["name"]] = base_path
+        # Initialize best configs from base YAML
+        with open(base_path) as f:
+            best_config_content[h["name"]] = f.read()
+        best_harness_score[h["name"]] = 0.0
 
-    for iteration in range(actual_start, iterations + 1):
+    for iteration in range(1, iterations + 1):
         print(f"\n{'='*70}")
         print(f"=== ITERATION {iteration} ===")
         print(f"{'='*70}")
@@ -1047,77 +1024,143 @@ async def run_multi_harness_loop(
             if prev_result and hname in prev_result.harness_results:
                 delta = hr.aggregate_score - prev_result.harness_results[hname].aggregate_score
                 delta_str = f" ({'+' if delta >= 0 else ''}{delta:.1f})"
-            print(f"  {hname:20s}: {hr.aggregate_score:.1f}/100 ({len(hr.records)} cases){delta_str}")
+            best_str = f" [best={best_harness_score[hname]:.1f}]"
+            print(f"  {hname:20s}: {hr.aggregate_score:.1f}/100 ({len(hr.records)} cases){delta_str}{best_str}")
 
         agg_delta_str = ""
         if prev_result:
             agg_delta = it_result.aggregate_score - prev_result.aggregate_score
             agg_delta_str = f" ({'+' if agg_delta >= 0 else ''}{agg_delta:.1f})"
-        print(f"  {'Aggregate':20s}: {it_result.aggregate_score:.1f}/100{agg_delta_str}")
+        print(f"  {'Aggregate':20s}: {it_result.aggregate_score:.1f}/100{agg_delta_str} [best={best_aggregate_score:.1f}]")
 
-        # Regression gate
-        gate_passed, gate_reasons = check_regression_gate(it_result, prev_result)
-        promoted = gate_passed and prev_result is not None
-        promotion_log.append({
-            "iteration": iteration,
-            "gate_passed": gate_passed,
-            "promoted": promoted,
-        })
-        print(f"\nRegression gate: {'PASS' if gate_passed else 'FAIL'}")
-        for reason in gate_reasons:
-            print(reason)
+        # -- (A) Update best-config tracking --
+        new_bests = []
+        for hname, hr in it_result.harness_results.items():
+            if hr.aggregate_score > best_harness_score[hname]:
+                old_best = best_harness_score[hname]
+                best_harness_score[hname] = hr.aggregate_score
+                # Save the YAML content that produced this score
+                config_path = current_configs[hname]
+                with open(config_path) as f:
+                    best_config_content[hname] = f.read()
+                new_bests.append(f"  [{hname}] NEW BEST: {old_best:.1f} -> {hr.aggregate_score:.1f} (config: {config_path.name})")
 
-        # Learning loop (skip after last iteration)
-        if iteration < iterations:
-            print(f"\nLearning loop proposals:")
+        if it_result.aggregate_score > best_aggregate_score:
+            best_aggregate_score = it_result.aggregate_score
 
+        if new_bests:
+            print(f"\nBest-config updates:")
+            for msg in new_bests:
+                print(msg)
+        else:
+            print(f"\nNo new best scores this iteration.")
+
+        # -- (D) Rollback check --
+        rollback_triggered = False
+        if iteration > 1 and it_result.aggregate_score < (best_aggregate_score - ROLLBACK_THRESHOLD):
+            rollback_triggered = True
+            print(f"\n*** ROLLBACK TRIGGERED: score {it_result.aggregate_score:.1f} below best {best_aggregate_score:.1f} "
+                  f"(threshold: -{ROLLBACK_THRESHOLD}) ***")
+            # Restore all configs to their best-ever versions
             for harness in HARNESSES:
                 hname = harness["name"]
-                config_path = current_configs[hname]
-                config = load_dag_config(config_path)
-                hr = it_result.harness_results[hname]
+                base_name = Path(harness["yaml"]).stem
+                rollback_path = SANDBOX_DIR / f"{base_name}_v{iteration + 1}.yaml"
+                with open(rollback_path, "w") as f:
+                    f.write(best_config_content[hname])
+                current_configs[hname] = rollback_path
+                print(f"  [{hname}] Rolled back to best config -> {rollback_path.name}")
+
+            promotion_log.append({
+                "iteration": iteration,
+                "gate_passed": False,
+                "promoted": False,
+                "action": "ROLLBACK",
+            })
+        else:
+            promotion_log.append({
+                "iteration": iteration,
+                "gate_passed": True,
+                "promoted": iteration > 1 and len(new_bests) > 0,
+                "action": "OK" if not new_bests else "PROMOTED",
+            })
+
+        # -- Learning loop (skip after last iteration and after rollback) --
+        if iteration < iterations and not rollback_triggered:
+            # -- (C) One-at-a-time: find the single weakest harness --
+            harness_gaps: list[tuple[str, float, float]] = []  # (name, score, gap_from_best)
+            for harness in HARNESSES:
+                hname = harness["name"]
+                score = it_result.harness_results[hname].aggregate_score
+                gap = best_harness_score[hname] - score
+                harness_gaps.append((hname, score, gap))
+
+            harness_gaps.sort(key=lambda x: -x[2])  # largest gap first
+            weakest_name, weakest_score, weakest_gap = harness_gaps[0]
+
+            print(f"\nHarness gaps from best:")
+            for hname, score, gap in harness_gaps:
+                within_stability = gap <= STABILITY_THRESHOLD
+                status = "STABLE (skip)" if within_stability else "CANDIDATE"
+                print(f"  {hname:20s}: score={score:.1f}, best={best_harness_score[hname]:.1f}, gap={gap:.1f} -> {status}")
+
+            # -- (B) Stability zone check --
+            if weakest_gap <= STABILITY_THRESHOLD:
+                print(f"\nAll harnesses within stability zone ({STABILITY_THRESHOLD} pts). No modifications.")
+                promotion_log[-1]["action"] = "STABLE"
+            else:
+                print(f"\nModifying ONLY weakest harness: {weakest_name} (gap={weakest_gap:.1f})")
+
+                # Start from the BEST config, not the latest (A)
+                # Write best config to a temp location, load it
+                best_yaml = best_config_content[weakest_name]
+                best_parsed = yaml.safe_load(best_yaml)
+                best_config = best_parsed.get("dag", best_parsed)
+
+                harness_obj = next(h for h in HARNESSES if h["name"] == weakest_name)
+                hr = it_result.harness_results[weakest_name]
 
                 proposals = await analyze_and_propose_for_harness(
-                    client, hr, config, hname,
+                    client, hr, best_config, weakest_name,
                 )
                 for i, prop in enumerate(proposals, 1):
                     first_line = prop.split("\n")[0].strip()
-                    print(f"  [{hname}] Proposal {i}: {first_line[:70]}")
+                    print(f"  [{weakest_name}] Proposal {i}: {first_line[:70]}")
 
-                # Only generate improved DAG if gate passed or this is first iteration
-                if gate_passed or prev_result is None:
-                    next_version = iteration + 1
-                    try:
-                        new_config = await generate_improved_dag(
-                            client, config, proposals, next_version, hname,
-                        )
-                    except (yaml.YAMLError, ValueError) as e:
-                        print(f"  [{hname}] YAML VALIDATION FAILED: {e}")
-                        print(f"  [{hname}] Keeping previous config (not promoting invalid YAML)")
-                        continue
-                    except Exception as e:
-                        print(f"  [{hname}] WARNING: Failed to generate improved config: {e}")
-                        print(f"  [{hname}] Keeping previous config")
-                        continue
-
-                    # Write the new config
-                    base_name = Path(harness["yaml"]).stem
+                next_version = iteration + 1
+                try:
+                    new_config = await generate_improved_dag(
+                        client, best_config, proposals, next_version, weakest_name,
+                    )
+                except (yaml.YAMLError, ValueError) as e:
+                    print(f"  [{weakest_name}] YAML VALIDATION FAILED: {e}")
+                    print(f"  [{weakest_name}] Keeping best config (not promoting invalid YAML)")
+                except Exception as e:
+                    print(f"  [{weakest_name}] WARNING: Failed to generate improved config: {e}")
+                    print(f"  [{weakest_name}] Keeping best config")
+                else:
+                    # Write the new config for the weakest harness only
+                    base_name = Path(harness_obj["yaml"]).stem
                     new_config_path = SANDBOX_DIR / f"{base_name}_v{next_version}.yaml"
                     with open(new_config_path, "w") as f:
                         yaml.dump({"dag": new_config}, f, default_flow_style=False, sort_keys=False)
-                    print(f"  [{hname}] Wrote {new_config_path.name}")
-                    current_configs[hname] = new_config_path
-                else:
-                    print(f"  [{hname}] Regression gate FAILED - keeping current config (no promotion)")
+                    print(f"  [{weakest_name}] Wrote {new_config_path.name}")
+                    current_configs[weakest_name] = new_config_path
 
-        # Save scores after each iteration
+                # Ensure other harnesses stay on their best configs (unchanged)
+                for harness in HARNESSES:
+                    hname = harness["name"]
+                    if hname != weakest_name:
+                        print(f"  [{hname}] Unchanged (not the weakest)")
+
+        # Save scores after each iteration (crash-safe)
         save_scores(all_iterations)
 
     # =================================================================
-    # Final Summary Table (requested format)
+    # Final Summary Table
     # =================================================================
     print(f"\n{'='*70}")
-    print("=== GRAPH GARDENER: {}-ITERATION HILL CLIMB ===".format(iterations))
+    print("=== GRAPH GARDENER: {}-ITERATION CONSERVATIVE HILL CLIMB ===".format(iterations))
     print(f"{'='*70}\n")
 
     harness_names = [h["name"] for h in HARNESSES]
@@ -1125,9 +1168,9 @@ async def run_multi_harness_loop(
     hdr = "Iter |"
     for hname in harness_names:
         hdr += f" {hname:^17s}|"
-    hdr += f" {'AGGREGATE':^11s}| Promoted?"
+    hdr += f" {'AGGREGATE':^11s}| Action"
     print(hdr)
-    print("-----|" + "-" * 17 + "|" + "-" * 17 + "|" + "-" * 17 + "|" + "-" * 11 + "|----------")
+    print("-----|" + "-" * 17 + "|" + "-" * 17 + "|" + "-" * 17 + "|" + "-" * 11 + "|-----------")
 
     for it in all_iterations:
         row = f"  {it.iteration:2d} |"
@@ -1138,32 +1181,41 @@ async def run_multi_harness_loop(
             else:
                 row += f"       N/A       |"
         row += f"   {it.aggregate_score:5.1f}   |"
-        # Promotion status
+        # Action status
         plog = next((p for p in promotion_log if p["iteration"] == it.iteration), None)
         if plog is None or it.iteration == 1:
-            row += "    -"
-        elif plog["gate_passed"]:
-            row += "   YES"
+            row += " baseline"
         else:
-            row += "    NO"
+            row += f" {plog.get('action', '?'):9s}"
         print(row)
+
+    # Best scores
+    print(f"\nBest scores achieved:")
+    for hname in harness_names:
+        print(f"  {hname:20s}: {best_harness_score[hname]:.1f}")
+    print(f"  {'Best aggregate':20s}: {best_aggregate_score:.1f}")
 
     # Total improvement
     if len(all_iterations) >= 2:
         total_improvement = all_iterations[-1].aggregate_score - all_iterations[0].aggregate_score
         sign = "+" if total_improvement >= 0 else ""
-        print(f"\nTotal improvement: {sign}{total_improvement:.1f} points over {iterations} iterations")
+        print(f"\nTotal improvement (first->last): {sign}{total_improvement:.1f} points over {iterations} iterations")
+        best_improvement = best_aggregate_score - all_iterations[0].aggregate_score
+        sign2 = "+" if best_improvement >= 0 else ""
+        print(f"Best improvement (first->best):  {sign2}{best_improvement:.1f} points")
     else:
         print(f"\nOnly 1 iteration run.")
 
-    promotions = sum(1 for p in promotion_log if p["promoted"])
-    rejections = sum(1 for p in promotion_log if not p["gate_passed"] and p["iteration"] > 1)
-    print(f"Promotions: {promotions}")
-    print(f"Regressions blocked: {rejections}")
+    promotions = sum(1 for p in promotion_log if p.get("action") == "PROMOTED")
+    rollbacks = sum(1 for p in promotion_log if p.get("action") == "ROLLBACK")
+    stables = sum(1 for p in promotion_log if p.get("action") == "STABLE")
+    print(f"\nPromotions: {promotions}")
+    print(f"Rollbacks:  {rollbacks}")
+    print(f"Stability skips: {stables}")
 
     print(f"\nTotal test cases per iteration: {all_iterations[0].total_cases if all_iterations else 0}")
     total_judge_calls = sum(it.total_cases for it in all_iterations) * 3  # 1 dag + 2 judge per case
-    learning_calls = len(HARNESSES) * 2 * max(0, len(all_iterations) - 1)
+    learning_calls = sum(1 for p in promotion_log if p.get("action") not in ("ROLLBACK", "STABLE", None)) * 2
     print(f"Total LLM calls: ~{total_judge_calls + learning_calls} (dag + 2x judge + learning loop)")
 
     # Weakest cases from final iteration
@@ -1239,7 +1291,7 @@ async def main():
 
     total_cases = sum(len(h["cases"]) for h in HARNESSES)
     print("=" * 70)
-    print("Multi-Harness Benchmark + Learning Loop")
+    print("Multi-Harness Benchmark + Conservative Learning Loop")
     print("=" * 70)
     print(f"Harnesses: {len(HARNESSES)}")
     for h in HARNESSES:
@@ -1247,8 +1299,11 @@ async def main():
     print(f"Total cases per iteration: {total_cases}")
     print(f"Iterations: {args.iterations}")
     print(f"Judge model: {JUDGE_MODEL}")
-    print(f"Regression tolerance: {REGRESSION_TOLERANCE} points")
-    print(f"Estimated LLM calls: ~{total_cases * 3 * args.iterations + len(HARNESSES) * 2 * (args.iterations - 1)} (dag + 2x judge + learning)")
+    print(f"Strategy: conservative (best-config tracking, stability zone, one-at-a-time, rollback)")
+    print(f"Stability threshold: {STABILITY_THRESHOLD} points")
+    print(f"Rollback threshold: {ROLLBACK_THRESHOLD} points")
+    print(f"LLM delay: {LLM_DELAY}s")
+    print(f"Estimated LLM calls: ~{total_cases * 3 * args.iterations + 2 * (args.iterations - 1)} (dag + 2x judge + learning)")
 
     await run_multi_harness_loop(
         args.iterations,
