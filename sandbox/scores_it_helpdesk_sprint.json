@@ -1,0 +1,1853 @@
+{
+  "experiment": "it_helpdesk_sprint_d",
+  "model": "gemini-3.5-flash",
+  "judge_model": "gemini-3.5-flash",
+  "cases": 18,
+  "approaches": {
+    "Control": {
+      "avg_score": 83.06,
+      "avg_quality": 19.28,
+      "avg_helpfulness": 13.78,
+      "category_breakdown": {
+        "password-reset": {
+          "avg_score": 82.25,
+          "avg_quality": 19.25,
+          "avg_helpfulness": 13.0,
+          "count": 4
+        },
+        "software-install": {
+          "avg_score": 82.8,
+          "avg_quality": 19.6,
+          "avg_helpfulness": 13.2,
+          "count": 5
+        },
+        "hardware": {
+          "avg_score": 93.0,
+          "avg_quality": 24.25,
+          "avg_helpfulness": 18.75,
+          "count": 4
+        },
+        "network": {
+          "avg_score": 76.0,
+          "avg_quality": 15.0,
+          "avg_helpfulness": 11.0,
+          "count": 5
+        }
+      },
+      "per_case": [
+        {
+          "case_id": 1,
+          "query": "I forgot my password and can't log in",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response clearly guides the user through the self-service portal with actionable steps and an escalation path.",
+          "response_length": 1168,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 2,
+          "query": "My account got locked after too many login attempts",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response details the unlock process and lockout prevention well, but ends abruptly, leaving the escalation path unfinished.",
+          "response_length": 1634,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 3,
+          "query": "I need to change my password, it's been 90 days",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response successfully outlines password change steps and policy requirements, though the text cuts off at the very end.",
+          "response_length": 1807,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 4,
+          "query": "My SSO login isn't working with the company portal",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 84,
+          "quality": 20,
+          "helpfulness": 14,
+          "reasoning": "The response provides clear SSO troubleshooting and cookie-clearing steps but omits checking the IdP status.",
+          "response_length": 1523,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 5,
+          "query": "I need Adobe Photoshop installed on my workstation",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 86,
+          "quality": 22,
+          "helpfulness": 14,
+          "reasoning": "The response excellently addresses the licensing, approval, and request process criteria, but it is truncated at the very end and lacks an escalation path.",
+          "response_length": 1741,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 6,
+          "query": "How do I install the company VPN client?",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 82,
+          "quality": 19,
+          "helpfulness": 13,
+          "reasoning": "The response provides clear, platform-specific installation steps but is incomplete due to an abrupt cutoff at the end.",
+          "response_length": 1606,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 7,
+          "query": "Microsoft Office keeps asking me to activate my license",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response successfully addresses license troubleshooting and corporate sign-in, but contains an incomplete final sentence.",
+          "response_length": 1848,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 8,
+          "query": "I need Python and VS Code set up for development",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 84,
+          "quality": 20,
+          "helpfulness": 14,
+          "reasoning": "The response outlines clear self-service installation and verification steps, though the text cuts off at the very end.",
+          "response_length": 1641,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 9,
+          "query": "Slack is not updating to the latest version",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 82,
+          "quality": 19,
+          "helpfulness": 13,
+          "reasoning": "The response successfully addresses manual updates and admin restrictions, though it cuts off at the end.",
+          "response_length": 1587,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 10,
+          "query": "My laptop screen is flickering constantly",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 98,
+          "quality": 29,
+          "helpfulness": 19,
+          "reasoning": "The response perfectly addresses all quality criteria with clear, step-by-step instructions for the driver update, external monitor test, and hardware repair escalation.",
+          "response_length": 1312,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 11,
+          "query": "The printer on the 3rd floor isn't working",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 98,
+          "quality": 29,
+          "helpfulness": 19,
+          "reasoning": "The response perfectly addresses all quality criteria by suggesting specific troubleshooting steps, such as checking the power and looking for paper jams, while clearly offering to dispatch on-site support if those steps fail.",
+          "response_length": 804,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 12,
+          "query": "My laptop won't turn on at all",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 93,
+          "quality": 24,
+          "helpfulness": 19,
+          "reasoning": "The response provides excellent troubleshooting steps for the power adapter and battery reset, but offers escalation to on-site support instead of explicitly offering a replacement.",
+          "response_length": 1279,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 13,
+          "query": "My keyboard is typing the wrong characters",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 83,
+          "quality": 15,
+          "helpfulness": 18,
+          "reasoning": "The response provides excellent, actionable troubleshooting steps and a clear escalation path, but misses two of the specific quality criteria: suggesting an external keyboard and a driver update.",
+          "response_length": 1320,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 14,
+          "query": "I can't connect to the VPN from home",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 79,
+          "quality": 17,
+          "helpfulness": 12,
+          "reasoning": "Provides clear initial troubleshooting and credential checks, but is truncated and lacks firewall or ISP blocking details.",
+          "response_length": 2069,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 15,
+          "query": "The office Wi-Fi keeps disconnecting",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 72,
+          "quality": 12,
+          "helpfulness": 10,
+          "reasoning": "The response covers forgetting the network but misses signal strength and band suggestions, and cuts off mid-sentence.",
+          "response_length": 2482,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 16,
+          "query": "I can't access the internal wiki from my desk",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 78,
+          "quality": 16,
+          "helpfulness": 12,
+          "reasoning": "The response addresses network and DNS checks but lacks proxy details and cuts off mid-sentence.",
+          "response_length": 2219,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 17,
+          "query": "Video calls keep freezing and dropping",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 76,
+          "quality": 16,
+          "helpfulness": 10,
+          "reasoning": "The response covers wired connections and reducing network load but misses QoS, bandwidth checks, and is truncated.",
+          "response_length": 2149,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 18,
+          "query": "I'm getting a DNS resolution error for company websites",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 75,
+          "quality": 14,
+          "helpfulness": 11,
+          "reasoning": "The response covers flushing DNS but misses other criteria and cuts off mid-sentence.",
+          "response_length": 2251,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        }
+      ]
+    },
+    "A (chain-of-thought)": {
+      "avg_score": 80.72,
+      "avg_quality": 18.5,
+      "avg_helpfulness": 12.22,
+      "category_breakdown": {
+        "password-reset": {
+          "avg_score": 82.75,
+          "avg_quality": 19.75,
+          "avg_helpfulness": 13.0,
+          "count": 4
+        },
+        "software-install": {
+          "avg_score": 83.4,
+          "avg_quality": 20.6,
+          "avg_helpfulness": 12.8,
+          "count": 5
+        },
+        "hardware": {
+          "avg_score": 77.25,
+          "avg_quality": 16.25,
+          "avg_helpfulness": 11.0,
+          "count": 4
+        },
+        "network": {
+          "avg_score": 79.2,
+          "avg_quality": 17.2,
+          "avg_helpfulness": 12.0,
+          "count": 5
+        }
+      },
+      "per_case": [
+        {
+          "case_id": 1,
+          "query": "I forgot my password and can't log in",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response effectively guides the user through the self-service password reset process with clear steps and escalation details.",
+          "response_length": 1364,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 2,
+          "query": "My account got locked after too many login attempts",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 81,
+          "quality": 19,
+          "helpfulness": 12,
+          "reasoning": "The response addresses the unlock process and lockout prevention well, but contains an incomplete final sentence and lacks contact escalation details.",
+          "response_length": 2020,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 3,
+          "query": "I need to change my password, it's been 90 days",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 82,
+          "quality": 19,
+          "helpfulness": 13,
+          "reasoning": "The response outlines clear steps and policy details but is incomplete due to an abrupt cutoff at the end.",
+          "response_length": 1706,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 4,
+          "query": "My SSO login isn't working with the company portal",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 83,
+          "quality": 20,
+          "helpfulness": 13,
+          "reasoning": "The response provides clear, actionable SSO troubleshooting steps including cookie clearance, though it lacks an explicit IdP status check and cuts off at the end.",
+          "response_length": 1862,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 5,
+          "query": "I need Adobe Photoshop installed on my workstation",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 87,
+          "quality": 23,
+          "helpfulness": 14,
+          "reasoning": "The response provides excellent, detailed instructions covering the request process, licensing, and approval workflow, but it is cut off mid-sentence in the escalation section.",
+          "response_length": 1649,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 6,
+          "query": "How do I install the company VPN client?",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear, actionable installation steps and locations but is incomplete due to an abrupt cutoff at the end.",
+          "response_length": 2094,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 7,
+          "query": "Microsoft Office keeps asking me to activate my license",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response addresses the criteria and suggests corporate sign-in, but the text is cut off at the end.",
+          "response_length": 2326,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 8,
+          "query": "I need Python and VS Code set up for development",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 89,
+          "quality": 25,
+          "helpfulness": 14,
+          "reasoning": "The response provides excellent, actionable self-service installation steps for both tools via the company catalog, but it lacks an escalation path and cuts off abruptly at the very end.",
+          "response_length": 2120,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 9,
+          "query": "Slack is not updating to the latest version",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 81,
+          "quality": 19,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear manual update steps and addresses admin restrictions, but ends with an incomplete sentence.",
+          "response_length": 2036,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 10,
+          "query": "My laptop screen is flickering constantly",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response successfully suggests the external monitor test and display driver update with clear steps, but it cuts off mid-sentence at step 4 and fails to explicitly recommend hardware repair.",
+          "response_length": 2468,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 11,
+          "query": "The printer on the 3rd floor isn't working",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 75,
+          "quality": 15,
+          "helpfulness": 10,
+          "reasoning": "The response provides excellent troubleshooting steps for power cycling and paper jams, but it cuts off abruptly at the escalation section and fails to offer to dispatch support.",
+          "response_length": 1724,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 12,
+          "query": "My laptop won't turn on at all",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 74,
+          "quality": 14,
+          "helpfulness": 10,
+          "reasoning": "The response provides good troubleshooting steps for the power adapter and battery reset, but it is truncated mid-sentence and fails to offer a replacement option as required.",
+          "response_length": 2154,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 13,
+          "query": "My keyboard is typing the wrong characters",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response successfully addresses language settings and driver updates, but it fails to suggest trying an external keyboard, lacks an escalation path, and is cut off mid-sentence at the end.",
+          "response_length": 2016,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 14,
+          "query": "I can't connect to the VPN from home",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 82,
+          "quality": 19,
+          "helpfulness": 13,
+          "reasoning": "The guide effectively addresses network and ISP troubleshooting but lacks detailed credential verification and a clear escalation path.",
+          "response_length": 1891,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 15,
+          "query": "The office Wi-Fi keeps disconnecting",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 17,
+          "helpfulness": 13,
+          "reasoning": "The response covers forgetting and reconnecting but lacks explicit steps for checking signal strength and trying a different band.",
+          "response_length": 2755,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 16,
+          "query": "I can't access the internal wiki from my desk",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 79,
+          "quality": 17,
+          "helpfulness": 12,
+          "reasoning": "The response covers network and DNS checks but omits proxy settings and cuts off mid-sentence.",
+          "response_length": 2700,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 17,
+          "query": "Video calls keep freezing and dropping",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 78,
+          "quality": 17,
+          "helpfulness": 11,
+          "reasoning": "The response addresses several key criteria like wired connections and closing apps, but it lacks QoS settings and cuts off abruptly.",
+          "response_length": 2052,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 18,
+          "query": "I'm getting a DNS resolution error for company websites",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 77,
+          "quality": 16,
+          "helpfulness": 11,
+          "reasoning": "The response outlines good troubleshooting steps like flushing DNS, but is truncated at the end, leaving DNS verification incomplete.",
+          "response_length": 2396,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        }
+      ]
+    },
+    "B (two-stage)": {
+      "avg_score": 72.39,
+      "avg_quality": 13.17,
+      "avg_helpfulness": 9.22,
+      "category_breakdown": {
+        "password-reset": {
+          "avg_score": 78.0,
+          "avg_quality": 16.5,
+          "avg_helpfulness": 11.5,
+          "count": 4
+        },
+        "software-install": {
+          "avg_score": 74.0,
+          "avg_quality": 14.4,
+          "avg_helpfulness": 9.6,
+          "count": 5
+        },
+        "hardware": {
+          "avg_score": 69.25,
+          "avg_quality": 11.75,
+          "avg_helpfulness": 7.5,
+          "count": 4
+        },
+        "network": {
+          "avg_score": 68.8,
+          "avg_quality": 10.4,
+          "avg_helpfulness": 8.4,
+          "count": 5
+        }
+      },
+      "per_case": [
+        {
+          "case_id": 1,
+          "query": "I forgot my password and can't log in",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response successfully guides the user through the self-service portal steps, though it cuts off abruptly at the end.",
+          "response_length": 3012,
+          "nodes_visited": [
+            "classify",
+            "triage_password_reset",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 2,
+          "query": "My account got locked after too many login attempts",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 77,
+          "quality": 15,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear self-service unlock steps but is truncated mid-sentence and fails to address lockout prevention.",
+          "response_length": 3061,
+          "nodes_visited": [
+            "classify",
+            "triage_password_reset",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 3,
+          "query": "I need to change my password, it's been 90 days",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 77,
+          "quality": 16,
+          "helpfulness": 11,
+          "reasoning": "The response outlines clear initial reset steps but is truncated, leaving the instructions incomplete and omitting the password policy details.",
+          "response_length": 3052,
+          "nodes_visited": [
+            "classify",
+            "triage_password_reset",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 4,
+          "query": "My SSO login isn't working with the company portal",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 78,
+          "quality": 17,
+          "helpfulness": 11,
+          "reasoning": "The response addresses SSO troubleshooting and cookie clearing but is cut off mid-sentence, rendering it incomplete.",
+          "response_length": 3157,
+          "nodes_visited": [
+            "classify",
+            "triage_password_reset",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 5,
+          "query": "I need Adobe Photoshop installed on my workstation",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 79,
+          "quality": 18,
+          "helpfulness": 11,
+          "reasoning": "The response thoroughly addresses the licensing and approval workflow criteria with specific details, but is truncated mid-sentence at the end, which impacts its completeness.",
+          "response_length": 4576,
+          "nodes_visited": [
+            "classify",
+            "triage_software_install",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 6,
+          "query": "How do I install the company VPN client?",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 70,
+          "quality": 12,
+          "helpfulness": 8,
+          "reasoning": "The response outlines prerequisites but cuts off abruptly, failing to provide the required download location and installation steps.",
+          "response_length": 4537,
+          "nodes_visited": [
+            "classify",
+            "triage_software_install",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 7,
+          "query": "Microsoft Office keeps asking me to activate my license",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 77,
+          "quality": 16,
+          "helpfulness": 11,
+          "reasoning": "The response addresses the criteria and mentions corporate accounts but is cut off mid-sentence.",
+          "response_length": 5069,
+          "nodes_visited": [
+            "classify",
+            "triage_software_install",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 8,
+          "query": "I need Python and VS Code set up for development",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 72,
+          "quality": 13,
+          "helpfulness": 9,
+          "reasoning": "The response outlines the initial provisioning process and prerequisites but is severely cut off mid-sentence, leaving the instructions incomplete.",
+          "response_length": 4265,
+          "nodes_visited": [
+            "classify",
+            "triage_software_install",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 9,
+          "query": "Slack is not updating to the latest version",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 72,
+          "quality": 13,
+          "helpfulness": 9,
+          "reasoning": "The response addresses admin restrictions but is cut off mid-sentence, leaving the manual update steps incomplete.",
+          "response_length": 4401,
+          "nodes_visited": [
+            "classify",
+            "triage_software_install",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 10,
+          "query": "My laptop screen is flickering constantly",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 74,
+          "quality": 14,
+          "helpfulness": 10,
+          "reasoning": "The response is truncated, omitting the display driver update and repair suggestions despite a good external monitor test.",
+          "response_length": 5220,
+          "nodes_visited": [
+            "classify",
+            "triage_hardware",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 11,
+          "query": "The printer on the 3rd floor isn't working",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 70,
+          "quality": 12,
+          "helpfulness": 8,
+          "reasoning": "The response provides detailed troubleshooting steps but is cut off mid-sentence and fails to offer to dispatch support as required by the criteria.",
+          "response_length": 4665,
+          "nodes_visited": [
+            "classify",
+            "triage_hardware",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 12,
+          "query": "My laptop won't turn on at all",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 67,
+          "quality": 10,
+          "helpfulness": 7,
+          "reasoning": "The response is cut off mid-sentence, failing to suggest a battery reset or offer a replacement as required by the quality criteria.",
+          "response_length": 5403,
+          "nodes_visited": [
+            "classify",
+            "triage_hardware",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 13,
+          "query": "My keyboard is typing the wrong characters",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 66,
+          "quality": 11,
+          "helpfulness": 5,
+          "reasoning": "The response is cut off mid-sentence, failing to complete the suggestions for trying an external keyboard and updating drivers, which severely impacts its completeness and helpfulness.",
+          "response_length": 5579,
+          "nodes_visited": [
+            "classify",
+            "triage_hardware",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 14,
+          "query": "I can't connect to the VPN from home",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 72,
+          "quality": 13,
+          "helpfulness": 9,
+          "reasoning": "The response provides useful ISP troubleshooting but is cut off mid-sentence, missing key criteria like credentials and firewall checks.",
+          "response_length": 5639,
+          "nodes_visited": [
+            "classify",
+            "triage_network",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 15,
+          "query": "The office Wi-Fi keeps disconnecting",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 71,
+          "quality": 11,
+          "helpfulness": 10,
+          "reasoning": "The response provides detailed IP and DNS troubleshooting but fails to address the requested criteria of forgetting the network, checking signal strength, or switching bands, and cuts off mid-sentence.",
+          "response_length": 5452,
+          "nodes_visited": [
+            "classify",
+            "triage_network",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 16,
+          "query": "I can't access the internal wiki from my desk",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 78,
+          "quality": 17,
+          "helpfulness": 11,
+          "reasoning": "The response covers the required network, DNS, and proxy criteria but is cut off mid-sentence.",
+          "response_length": 5736,
+          "nodes_visited": [
+            "classify",
+            "triage_network",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 17,
+          "query": "Video calls keep freezing and dropping",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 60,
+          "quality": 6,
+          "helpfulness": 4,
+          "reasoning": "The response is severely truncated, cutting off mid-sentence, and fails to address the required quality criteria such as suggesting a wired connection, closing other apps, or QoS settings.",
+          "response_length": 6018,
+          "nodes_visited": [
+            "classify",
+            "triage_network",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 18,
+          "query": "I'm getting a DNS resolution error for company websites",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 63,
+          "quality": 5,
+          "helpfulness": 8,
+          "reasoning": "The response completely misses the required quality criteria of flushing DNS, checking DNS settings, and trying alternate DNS, and the troubleshooting steps are cut off after Step 1.",
+          "response_length": 6573,
+          "nodes_visited": [
+            "classify",
+            "triage_network",
+            "handle_network"
+          ]
+        }
+      ]
+    },
+    "C (knowledge-enriched)": {
+      "avg_score": 82.89,
+      "avg_quality": 19.94,
+      "avg_helpfulness": 12.94,
+      "category_breakdown": {
+        "password-reset": {
+          "avg_score": 81.0,
+          "avg_quality": 18.75,
+          "avg_helpfulness": 12.25,
+          "count": 4
+        },
+        "software-install": {
+          "avg_score": 84.2,
+          "avg_quality": 21.0,
+          "avg_helpfulness": 13.2,
+          "count": 5
+        },
+        "hardware": {
+          "avg_score": 86.5,
+          "avg_quality": 22.0,
+          "avg_helpfulness": 14.5,
+          "count": 4
+        },
+        "network": {
+          "avg_score": 80.2,
+          "avg_quality": 18.2,
+          "avg_helpfulness": 12.0,
+          "count": 5
+        }
+      },
+      "per_case": [
+        {
+          "case_id": 1,
+          "query": "I forgot my password and can't log in",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response clearly guides the user through the self-service reset process with actionable steps and policy details.",
+          "response_length": 1787,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 2,
+          "query": "My account got locked after too many login attempts",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response outlines clear unlock procedures and prevention steps, though it cuts off mid-sentence at the end.",
+          "response_length": 1758,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 3,
+          "query": "I need to change my password, it's been 90 days",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear steps and policy details but cuts off abruptly at the end.",
+          "response_length": 1685,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 4,
+          "query": "My SSO login isn't working with the company portal",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 79,
+          "quality": 18,
+          "helpfulness": 11,
+          "reasoning": "The response addresses cookie clearing but omits IdP status checks and cuts off mid-sentence.",
+          "response_length": 2200,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 5,
+          "query": "I need Adobe Photoshop installed on my workstation",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 85,
+          "quality": 22,
+          "helpfulness": 13,
+          "reasoning": "The response successfully addresses the software request process, approval workflow, and licensing requirements, but it is cut off at the very end and lacks an escalation path.",
+          "response_length": 2100,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 6,
+          "query": "How do I install the company VPN client?",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear download locations and installation steps for the VPN client, but it is cut off at the end.",
+          "response_length": 1972,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 7,
+          "query": "Microsoft Office keeps asking me to activate my license",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 78,
+          "quality": 17,
+          "helpfulness": 11,
+          "reasoning": "The response provides relevant troubleshooting steps and corporate sign-in instructions, but is cut off at the end.",
+          "response_length": 2090,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 8,
+          "query": "I need Python and VS Code set up for development",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response clearly outlines actionable self-service installation steps and troubleshooting for the requested developer tools.",
+          "response_length": 1846,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 9,
+          "query": "Slack is not updating to the latest version",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 93,
+          "quality": 27,
+          "helpfulness": 16,
+          "reasoning": "The response successfully addresses all quality criteria by providing detailed manual update steps and addressing admin restrictions, though it cuts off abruptly at the end.",
+          "response_length": 2019,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 10,
+          "query": "My laptop screen is flickering constantly",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 89,
+          "quality": 24,
+          "helpfulness": 15,
+          "reasoning": "The response fully addresses all quality criteria with highly specific and actionable steps, though the text is cut off at the very end.",
+          "response_length": 2367,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 11,
+          "query": "The printer on the 3rd floor isn't working",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 81,
+          "quality": 18,
+          "helpfulness": 13,
+          "reasoning": "The response provides excellent, highly specific troubleshooting steps including power cycling, but the offer to dispatch support is cut off mid-sentence at the very end.",
+          "response_length": 1981,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 12,
+          "query": "My laptop won't turn on at all",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 81,
+          "quality": 19,
+          "helpfulness": 12,
+          "reasoning": "The response covers all required troubleshooting and replacement steps but cuts off abruptly at the end.",
+          "response_length": 2279,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 13,
+          "query": "My keyboard is typing the wrong characters",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 95,
+          "quality": 27,
+          "helpfulness": 18,
+          "reasoning": "The response fully addresses all quality criteria with highly specific, actionable steps and includes an escalation path, though the text cuts off slightly at the very end.",
+          "response_length": 2301,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 14,
+          "query": "I can't connect to the VPN from home",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response covers all required troubleshooting steps but is cut off at the end.",
+          "response_length": 2585,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 15,
+          "query": "The office Wi-Fi keeps disconnecting",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response addresses the key troubleshooting criteria but is cut off at the end.",
+          "response_length": 2172,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 16,
+          "query": "I can't access the internal wiki from my desk",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 77,
+          "quality": 16,
+          "helpfulness": 11,
+          "reasoning": "The response addresses network and DNS checks well but cuts off mid-sentence and lacks proxy troubleshooting steps.",
+          "response_length": 2388,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 17,
+          "query": "Video calls keep freezing and dropping",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 83,
+          "quality": 20,
+          "helpfulness": 13,
+          "reasoning": "The response addresses all key troubleshooting criteria but is cut off at the end.",
+          "response_length": 2118,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 18,
+          "query": "I'm getting a DNS resolution error for company websites",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 81,
+          "quality": 19,
+          "helpfulness": 12,
+          "reasoning": "The response successfully addresses all quality criteria with highly specific and actionable steps, but it is truncated abruptly at Step 4.",
+          "response_length": 2421,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        }
+      ]
+    },
+    "D (category-tuned)": {
+      "avg_score": 85.67,
+      "avg_quality": 21.39,
+      "avg_helpfulness": 14.28,
+      "category_breakdown": {
+        "password-reset": {
+          "avg_score": 83.75,
+          "avg_quality": 20.25,
+          "avg_helpfulness": 13.5,
+          "count": 4
+        },
+        "software-install": {
+          "avg_score": 85.8,
+          "avg_quality": 21.4,
+          "avg_helpfulness": 14.4,
+          "count": 5
+        },
+        "hardware": {
+          "avg_score": 97.0,
+          "avg_quality": 28.5,
+          "avg_helpfulness": 18.5,
+          "count": 4
+        },
+        "network": {
+          "avg_score": 78.0,
+          "avg_quality": 16.6,
+          "avg_helpfulness": 11.4,
+          "count": 5
+        }
+      },
+      "per_case": [
+        {
+          "case_id": 1,
+          "query": "I forgot my password and can't log in",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response clearly guides the user through the self-service portal steps and provides an escalation path.",
+          "response_length": 1049,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 2,
+          "query": "My account got locked after too many login attempts",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response clearly outlines multiple unlock methods and briefly mentions prevention tips, though it could expand slightly more on lockout prevention.",
+          "response_length": 1417,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 3,
+          "query": "I need to change my password, it's been 90 days",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response successfully provides clear password reset steps and outlines the policy requirements, but lacks a direct escalation path.",
+          "response_length": 1322,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 4,
+          "query": "My SSO login isn't working with the company portal",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response provides solid SSO troubleshooting steps including cookie clearing, but it lacks IdP status checks and cuts off mid-sentence.",
+          "response_length": 1755,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 5,
+          "query": "I need Adobe Photoshop installed on my workstation",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 100,
+          "quality": 30,
+          "helpfulness": 20,
+          "reasoning": "The response perfectly addresses all quality criteria by detailing the licensing, approval workflow, and software request process, while providing clear, actionable installation steps and an offer for further assistance.",
+          "response_length": 1473,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 6,
+          "query": "How do I install the company VPN client?",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 84,
+          "quality": 20,
+          "helpfulness": 14,
+          "reasoning": "The response provides clear, platform-specific installation steps and download locations, though it cuts off slightly at the very end.",
+          "response_length": 1578,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 7,
+          "query": "Microsoft Office keeps asking me to activate my license",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 79,
+          "quality": 18,
+          "helpfulness": 11,
+          "reasoning": "The response provides accurate troubleshooting and corporate sign-in steps, but is cut off at the end.",
+          "response_length": 2156,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 8,
+          "query": "I need Python and VS Code set up for development",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 81,
+          "quality": 18,
+          "helpfulness": 13,
+          "reasoning": "The response outlines clear self-service steps and configuration details, but cuts off mid-sentence at the end.",
+          "response_length": 1730,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 9,
+          "query": "Slack is not updating to the latest version",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response successfully details manual update steps and addresses admin restrictions via the company portal.",
+          "response_length": 1648,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 10,
+          "query": "My laptop screen is flickering constantly",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 100,
+          "quality": 30,
+          "helpfulness": 20,
+          "reasoning": "The response perfectly addresses all quality criteria with highly actionable steps and provides a clear escalation path for further support.",
+          "response_length": 1240,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 11,
+          "query": "The printer on the 3rd floor isn't working",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 100,
+          "quality": 30,
+          "helpfulness": 20,
+          "reasoning": "The response perfectly addresses all quality criteria by providing clear, actionable troubleshooting steps (including power cycling and checking for jams) and offers a clear escalation path for on-site support.",
+          "response_length": 1198,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 12,
+          "query": "My laptop won't turn on at all",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 88,
+          "quality": 24,
+          "helpfulness": 14,
+          "reasoning": "The response provides excellent, detailed troubleshooting steps covering the power adapter and battery reset, but it cuts off mid-sentence at the end, leaving the replacement offer and escalation path incomplete.",
+          "response_length": 1560,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 13,
+          "query": "My keyboard is typing the wrong characters",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 100,
+          "quality": 30,
+          "helpfulness": 20,
+          "reasoning": "The response perfectly addresses all quality criteria with highly actionable, step-by-step troubleshooting instructions and includes a clear escalation path.",
+          "response_length": 1401,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 14,
+          "query": "I can't connect to the VPN from home",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 77,
+          "quality": 16,
+          "helpfulness": 11,
+          "reasoning": "The response covers credential checks and client troubleshooting but is cut off and omits firewall and ISP verification.",
+          "response_length": 3926,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 15,
+          "query": "The office Wi-Fi keeps disconnecting",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 75,
+          "quality": 14,
+          "helpfulness": 11,
+          "reasoning": "The response provides clear steps for forgetting and reconnecting but cuts off prematurely and omits signal strength and band troubleshooting.",
+          "response_length": 4118,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 16,
+          "query": "I can't access the internal wiki from my desk",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response addresses network connectivity and DNS resolution but omits proxy settings and an escalation path.",
+          "response_length": 3882,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 17,
+          "query": "Video calls keep freezing and dropping",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 78,
+          "quality": 17,
+          "helpfulness": 11,
+          "reasoning": "The response addresses bandwidth, wired connections, and closing apps, but is truncated and lacks QoS settings.",
+          "response_length": 4174,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 18,
+          "query": "I'm getting a DNS resolution error for company websites",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear instructions for flushing DNS and checking VPNs, but it is incomplete and omits alternate DNS options.",
+          "response_length": 4742,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        }
+      ]
+    },
+    "Combined": {
+      "avg_score": 86.11,
+      "avg_quality": 21.72,
+      "avg_helpfulness": 14.39,
+      "category_breakdown": {
+        "password-reset": {
+          "avg_score": 82.0,
+          "avg_quality": 19.0,
+          "avg_helpfulness": 13.0,
+          "count": 4
+        },
+        "software-install": {
+          "avg_score": 83.8,
+          "avg_quality": 20.4,
+          "avg_helpfulness": 13.4,
+          "count": 5
+        },
+        "hardware": {
+          "avg_score": 97.25,
+          "avg_quality": 28.5,
+          "avg_helpfulness": 18.75,
+          "count": 4
+        },
+        "network": {
+          "avg_score": 82.8,
+          "avg_quality": 19.8,
+          "avg_helpfulness": 13.0,
+          "count": 5
+        }
+      },
+      "per_case": [
+        {
+          "case_id": 1,
+          "query": "I forgot my password and can't log in",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 85,
+          "quality": 21,
+          "helpfulness": 14,
+          "reasoning": "The response clearly outlines the self-service password reset steps and provides an escalation path.",
+          "response_length": 1318,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 2,
+          "query": "My account got locked after too many login attempts",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 79,
+          "quality": 17,
+          "helpfulness": 12,
+          "reasoning": "The response provides clear unlock options but is cut off at the end, leaving the lockout prevention advice incomplete.",
+          "response_length": 1634,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 3,
+          "query": "I need to change my password, it's been 90 days",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 82,
+          "quality": 19,
+          "helpfulness": 13,
+          "reasoning": "The response successfully details password reset steps and policy requirements, though the text cuts off at the very end.",
+          "response_length": 1693,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 4,
+          "query": "My SSO login isn't working with the company portal",
+          "expected_category": "password-reset",
+          "actual_category": "password-reset",
+          "score": 82,
+          "quality": 19,
+          "helpfulness": 13,
+          "reasoning": "The response provides clear troubleshooting steps like clearing cache, but omits checking the IdP status.",
+          "response_length": 1604,
+          "nodes_visited": [
+            "classify",
+            "handle_password_reset"
+          ]
+        },
+        {
+          "case_id": 5,
+          "query": "I need Adobe Photoshop installed on my workstation",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 98,
+          "quality": 29,
+          "helpfulness": 19,
+          "reasoning": "The response perfectly addresses the quality criteria by explaining the software request process, detailing the manager approval workflow, and addressing licensing requirements, while providing clear, actionable steps and an escalation path.",
+          "response_length": 1412,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 6,
+          "query": "How do I install the company VPN client?",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "Provides clear, platform-specific installation steps and portal details, but the text cuts off abruptly at the end.",
+          "response_length": 1618,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 7,
+          "query": "Microsoft Office keeps asking me to activate my license",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response provides good troubleshooting steps and corporate sign-in advice, but the text is truncated at the end.",
+          "response_length": 1924,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 8,
+          "query": "I need Python and VS Code set up for development",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response outlines the self-service installation and verification steps well, but it cuts off abruptly at the end.",
+          "response_length": 1651,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 9,
+          "query": "Slack is not updating to the latest version",
+          "expected_category": "software-install",
+          "actual_category": "software-install",
+          "score": 81,
+          "quality": 19,
+          "helpfulness": 12,
+          "reasoning": "The response successfully addresses manual updates and IT restrictions, though the text is slightly truncated at the very end.",
+          "response_length": 1718,
+          "nodes_visited": [
+            "classify",
+            "handle_software_install"
+          ]
+        },
+        {
+          "case_id": 10,
+          "query": "My laptop screen is flickering constantly",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 93,
+          "quality": 26,
+          "helpfulness": 17,
+          "reasoning": "The response fully addresses all quality criteria with highly actionable steps, including driver updates, external monitor testing, and hardware repair escalation, though it cuts off slightly at the very end.",
+          "response_length": 1626,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 11,
+          "query": "The printer on the 3rd floor isn't working",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 98,
+          "quality": 29,
+          "helpfulness": 19,
+          "reasoning": "The response fully meets all quality criteria by providing clear, actionable troubleshooting steps (including power cycling and checking for paper jams) and explicitly offering to dispatch on-site support if needed.",
+          "response_length": 1106,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 12,
+          "query": "My laptop won't turn on at all",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 98,
+          "quality": 29,
+          "helpfulness": 19,
+          "reasoning": "The response fully addresses all quality criteria by providing clear, actionable steps for checking the power adapter, performing a hard reset, and mentioning replacement/escalation options.",
+          "response_length": 1346,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 13,
+          "query": "My keyboard is typing the wrong characters",
+          "expected_category": "hardware",
+          "actual_category": "hardware",
+          "score": 100,
+          "quality": 30,
+          "helpfulness": 20,
+          "reasoning": "The response perfectly addresses all quality criteria with highly detailed, actionable steps and includes a clear escalation path.",
+          "response_length": 1380,
+          "nodes_visited": [
+            "classify",
+            "handle_hardware"
+          ]
+        },
+        {
+          "case_id": 14,
+          "query": "I can't connect to the VPN from home",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 84,
+          "quality": 20,
+          "helpfulness": 14,
+          "reasoning": "The response provides clear, actionable troubleshooting steps for credentials, firewall, and ISP issues, though it is slightly cut off at the end.",
+          "response_length": 2373,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 15,
+          "query": "The office Wi-Fi keeps disconnecting",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 78,
+          "quality": 17,
+          "helpfulness": 11,
+          "reasoning": "The response successfully details forgetting and reconnecting the network but is truncated and omits checking signal strength or trying other bands.",
+          "response_length": 2904,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 16,
+          "query": "I can't access the internal wiki from my desk",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response covers corporate network verification but is cut off during DNS troubleshooting and lacks proxy configuration steps.",
+          "response_length": 2724,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 17,
+          "query": "Video calls keep freezing and dropping",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 92,
+          "quality": 26,
+          "helpfulness": 16,
+          "reasoning": "The response successfully addresses all quality criteria including bandwidth checks, wired connections, closing apps, and QoS, but it is slightly truncated at the end and lacks an escalation path.",
+          "response_length": 2416,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        },
+        {
+          "case_id": 18,
+          "query": "I'm getting a DNS resolution error for company websites",
+          "expected_category": "network",
+          "actual_category": "network",
+          "score": 80,
+          "quality": 18,
+          "helpfulness": 12,
+          "reasoning": "The response successfully addresses DNS flushing and verification but is cut off mid-sentence and omits alternate DNS options.",
+          "response_length": 2362,
+          "nodes_visited": [
+            "classify",
+            "handle_network"
+          ]
+        }
+      ]
+    }
+  },
+  "combined_mapping": {
+    "password-reset": "D (category-tuned)",
+    "software-install": "D (category-tuned)",
+    "hardware": "D (category-tuned)",
+    "network": "C (knowledge-enriched)"
+  },
+  "combined_score": 86.11,
+  "control_score": 83.06,
+  "improvement": 3.06
+}
