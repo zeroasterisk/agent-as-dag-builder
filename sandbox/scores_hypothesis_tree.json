@@ -1,0 +1,538 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 85.69,
+          "holdout_score": 87.29,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 84.83,
+          "holdout_score": 84.5,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 79.73,
+          "holdout_score": 89.0,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity(rejected)",
+      "hypothesis_details": {
+        "target_harness": "sales_inquiry",
+        "variants": [
+          {
+            "strategy": "clarity",
+            "train_score": 90.91
+          },
+          {
+            "strategy": "knowledge",
+            "train_score": 90.36
+          },
+          {
+            "strategy": "templates",
+            "train_score": 78.18
+          }
+        ],
+        "winner": "clarity",
+        "winner_holdout": 87.0,
+        "current_holdout": 89.0,
+        "holdout_delta": -2.0,
+        "accepted": false
+      },
+      "train_aggregate": 83.42,
+      "holdout_aggregate": 86.93
+    },
+    {
+      "iteration": 2,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 88.88,
+          "holdout_score": 88.0,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 86.83,
+          "holdout_score": 84.33,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 86.55,
+          "holdout_score": 89.67,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "templates(rejected)",
+      "hypothesis_details": {
+        "target_harness": "sales_inquiry",
+        "variants": [
+          {
+            "strategy": "templates",
+            "train_score": 91.45
+          },
+          {
+            "strategy": "knowledge",
+            "train_score": 89.27
+          },
+          {
+            "strategy": "clarity",
+            "train_score": 83.64
+          }
+        ],
+        "winner": "templates",
+        "winner_holdout": 84.5,
+        "current_holdout": 89.67,
+        "holdout_delta": -5.17,
+        "accepted": false
+      },
+      "train_aggregate": 87.42,
+      "holdout_aggregate": 87.33
+    },
+    {
+      "iteration": 3,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 84.5,
+          "holdout_score": 91.57,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 87.58,
+          "holdout_score": 84.0,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 82.45,
+          "holdout_score": 87.33,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "knowledge(rejected)",
+      "hypothesis_details": {
+        "target_harness": "customer_support",
+        "variants": [
+          {
+            "strategy": "knowledge",
+            "train_score": 87.25
+          },
+          {
+            "strategy": "clarity",
+            "train_score": 84.69
+          },
+          {
+            "strategy": "templates",
+            "train_score": 84.12
+          }
+        ],
+        "winner": "knowledge",
+        "winner_holdout": 86.29,
+        "current_holdout": 91.57,
+        "holdout_delta": -5.29,
+        "accepted": false
+      },
+      "train_aggregate": 84.85,
+      "holdout_aggregate": 87.63
+    },
+    {
+      "iteration": 4,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 86.75,
+          "holdout_score": 91.0,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 85.33,
+          "holdout_score": 82.0,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 82.82,
+          "holdout_score": 89.33,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "knowledge(rejected)",
+      "hypothesis_details": {
+        "target_harness": "sales_inquiry",
+        "variants": [
+          {
+            "strategy": "knowledge",
+            "train_score": 91.45
+          },
+          {
+            "strategy": "clarity",
+            "train_score": 86.09
+          },
+          {
+            "strategy": "templates",
+            "train_score": 82.64
+          }
+        ],
+        "winner": "knowledge",
+        "winner_holdout": 87.17,
+        "current_holdout": 89.33,
+        "holdout_delta": -2.17,
+        "accepted": false
+      },
+      "train_aggregate": 84.97,
+      "holdout_aggregate": 87.44
+    },
+    {
+      "iteration": 5,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 87.31,
+          "holdout_score": 91.0,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 87.67,
+          "holdout_score": 81.83,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 82.64,
+          "holdout_score": 89.5,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "templates(rejected)",
+      "hypothesis_details": {
+        "target_harness": "sales_inquiry",
+        "variants": [
+          {
+            "strategy": "templates",
+            "train_score": 90.64
+          },
+          {
+            "strategy": "clarity",
+            "train_score": 87.55
+          },
+          {
+            "strategy": "knowledge",
+            "train_score": 87.0
+          }
+        ],
+        "winner": "templates",
+        "winner_holdout": 89.0,
+        "current_holdout": 89.5,
+        "holdout_delta": -0.5,
+        "accepted": false
+      },
+      "train_aggregate": 85.87,
+      "holdout_aggregate": 87.44
+    },
+    {
+      "iteration": 6,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 86.19,
+          "holdout_score": 88.86,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 88.75,
+          "holdout_score": 86.33,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 86.73,
+          "holdout_score": 85.17,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity(rejected)",
+      "hypothesis_details": {
+        "target_harness": "customer_support",
+        "variants": [
+          {
+            "strategy": "clarity",
+            "train_score": 87.06
+          },
+          {
+            "strategy": "templates",
+            "train_score": 86.81
+          },
+          {
+            "strategy": "knowledge",
+            "train_score": 84.69
+          }
+        ],
+        "winner": "clarity",
+        "winner_holdout": 88.57,
+        "current_holdout": 88.86,
+        "holdout_delta": -0.29,
+        "accepted": false
+      },
+      "train_aggregate": 87.22,
+      "holdout_aggregate": 86.79
+    },
+    {
+      "iteration": 7,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 85.25,
+          "holdout_score": 84.0,
+          "train_cases": 16,
+          "holdout_cases": 7
+        },
+        "it_helpdesk": {
+          "train_score": 90.08,
+          "holdout_score": 85.17,
+          "train_cases": 12,
+          "holdout_cases": 6
+        },
+        "sales_inquiry": {
+          "train_score": 88.45,
+          "holdout_score": 88.67,
+          "train_cases": 11,
+          "holdout_cases": 6
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "templates",
+      "hypothesis_details": {
+        "target_harness": "customer_support",
+        "variants": [
+          {
+            "strategy": "templates",
+            "train_score": 86.44
+          },
+          {
+            "strategy": "knowledge",
+            "train_score": 84.5
+          },
+          {
+            "strategy": "clarity",
+            "train_score": 83.94
+          }
+        ],
+        "winner": "templates",
+        "winner_holdout": 90.86,
+        "current_holdout": 84.0,
+        "holdout_delta": 6.86,
+        "accepted": true
+      },
+      "train_aggregate": 87.93,
+      "holdout_aggregate": 85.94
+    }
+  ],
+  "insights": [
+    {
+      "iteration": 1,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity strategy on sales_inquiry",
+      "train_delta": 11.18,
+      "holdout_delta": -2.0,
+      "accepted": false
+    },
+    {
+      "iteration": 1,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on sales_inquiry",
+      "train_delta": 10.64,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 1,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates strategy on sales_inquiry",
+      "train_delta": -1.55,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 2,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates strategy on sales_inquiry",
+      "train_delta": 4.91,
+      "holdout_delta": -5.17,
+      "accepted": false
+    },
+    {
+      "iteration": 2,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on sales_inquiry",
+      "train_delta": 2.73,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 2,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity strategy on sales_inquiry",
+      "train_delta": -2.91,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 3,
+      "harness": "customer_support",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on customer_support",
+      "train_delta": 2.75,
+      "holdout_delta": -5.29,
+      "accepted": false
+    },
+    {
+      "iteration": 3,
+      "harness": "customer_support",
+      "strategy": "clarity",
+      "description": "clarity strategy on customer_support",
+      "train_delta": 0.19,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 3,
+      "harness": "customer_support",
+      "strategy": "templates",
+      "description": "templates strategy on customer_support",
+      "train_delta": -0.38,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 4,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on sales_inquiry",
+      "train_delta": 8.64,
+      "holdout_delta": -2.17,
+      "accepted": false
+    },
+    {
+      "iteration": 4,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity strategy on sales_inquiry",
+      "train_delta": 3.27,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 4,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates strategy on sales_inquiry",
+      "train_delta": -0.18,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 5,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates strategy on sales_inquiry",
+      "train_delta": 8.0,
+      "holdout_delta": -0.5,
+      "accepted": false
+    },
+    {
+      "iteration": 5,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity strategy on sales_inquiry",
+      "train_delta": 4.91,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 5,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on sales_inquiry",
+      "train_delta": 4.36,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 6,
+      "harness": "customer_support",
+      "strategy": "clarity",
+      "description": "clarity strategy on customer_support",
+      "train_delta": 0.88,
+      "holdout_delta": -0.29,
+      "accepted": false
+    },
+    {
+      "iteration": 6,
+      "harness": "customer_support",
+      "strategy": "templates",
+      "description": "templates strategy on customer_support",
+      "train_delta": 0.62,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 6,
+      "harness": "customer_support",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on customer_support",
+      "train_delta": -1.5,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 7,
+      "harness": "customer_support",
+      "strategy": "templates",
+      "description": "templates strategy on customer_support",
+      "train_delta": 1.19,
+      "holdout_delta": 6.86,
+      "accepted": true
+    },
+    {
+      "iteration": 7,
+      "harness": "customer_support",
+      "strategy": "knowledge",
+      "description": "knowledge strategy on customer_support",
+      "train_delta": -0.75,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 7,
+      "harness": "customer_support",
+      "strategy": "clarity",
+      "description": "clarity strategy on customer_support",
+      "train_delta": -1.31,
+      "holdout_delta": 0.0,
+      "accepted": false
+    }
+  ]
+}
