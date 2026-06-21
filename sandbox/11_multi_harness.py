@@ -10,6 +10,12 @@ Conservative optimization strategy:
   C. One-at-a-time -- only modify the single weakest harness per iteration
   D. Rollback -- if aggregate drops >2 pts below best, rollback all to best
 
+Integrated improvements (from Sprints B/C/D):
+  - Template injection: APPEND issue-specific templates to handlers, not rewrite
+  - Domain knowledge: inject realistic knowledge bases (server names, DNS IPs)
+  - Agent-driven context: expert asks what it needs to see for improvement
+  - No verifier nodes: same-model verification is a coin flip (Sprint B)
+
 Usage:
     python sandbox/11_multi_harness.py                    # Run 3 iterations
     python sandbox/11_multi_harness.py --iterations 5     # Run 5 iterations
@@ -440,7 +446,7 @@ INPUT:
 - Quality criteria: {quality_criteria}
 
 RESPONSE:
-{response[:1000]}
+{response[:2000]}
 
 SCORING RUBRIC:
 quality_score (integer 0-30):
@@ -587,22 +593,86 @@ class IterationResult:
 # =============================================================================
 
 
+def _build_agent_driven_context(
+    harness_result: HarnessResult,
+    current_config: dict,
+    harness_name: str,
+) -> str:
+    """Build agent-driven context for the improvement prompt.
+
+    Instead of truncating the full YAML or dumping everything, we extract
+    only the relevant handler nodes for the weakest category, plus the
+    classifier. This is the 'localize' pattern from Sprint C that gives
+    the optimizer the right context without noise.
+    """
+    breakdown = harness_result.category_breakdown()
+    weak_cases = harness_result.weakest_cases(5)
+
+    # Find the weakest category
+    weakest_cat = min(breakdown.items(), key=lambda x: x[1]["avg_score"])
+    weakest_cat_name = weakest_cat[0]
+
+    # Extract relevant nodes: classifier + weakest handler
+    nodes_by_id = {n["id"]: n for n in current_config.get("nodes", [])}
+    relevant_nodes = []
+    for n in current_config.get("nodes", []):
+        nid = n["id"]
+        if "classify" in nid:
+            relevant_nodes.append(n)
+        elif weakest_cat_name.replace("-", "_") in nid or weakest_cat_name.replace("-", "") in nid:
+            relevant_nodes.append(n)
+
+    # Also include cases from the weakest category for full context
+    weak_category_cases = [r for r in harness_result.records
+                          if r.expected_category == weakest_cat_name]
+
+    context = f"WEAKEST CATEGORY: {weakest_cat_name}\n"
+    context += f"Category score: {weakest_cat[1]['avg_score']:.1f}/100\n"
+    context += f"Category accuracy: {weakest_cat[1]['accuracy']:.0%}\n\n"
+
+    context += "RELEVANT NODES (classifier + weakest handler):\n"
+    context += yaml.dump({"nodes": relevant_nodes}, default_flow_style=False, width=120)
+    context += "\n"
+
+    context += f"WEAK CASES IN {weakest_cat_name}:\n"
+    for r in weak_category_cases:
+        context += f"  Case {r.case_id}: \"{r.query}\"\n"
+        context += f"    Expected: {r.expected_category}, Got: {r.actual_category}\n"
+        context += f"    Score: {r.score['total_score']}, Quality: {r.score['quality_score']}, "
+        context += f"Helpfulness: {r.score['helpfulness_score']}\n"
+        context += f"    Judge: {r.score.get('reasoning', '')[:150]}\n"
+        context += f"    Criteria: {r.quality_criteria}\n"
+        context += f"    Response preview: {r.response[:200]}\n\n"
+
+    return context
+
+
 async def analyze_and_propose_for_harness(
     client: genai.Client,
     harness_result: HarnessResult,
     current_config: dict,
     harness_name: str,
 ) -> list[str]:
-    """Analyze benchmark results for one harness and propose improvements."""
+    """Analyze benchmark results for one harness and propose template additions.
+
+    Uses agent-driven context (Sprint C) to focus on the weakest category,
+    and proposes issue-specific templates + domain knowledge (Sprint D)
+    rather than full instruction rewrites.
+    """
     breakdown = harness_result.category_breakdown()
     weak_cases = harness_result.weakest_cases(5)
 
     valid_categories = extract_categories_from_config(current_config)
 
+    # Use agent-driven context: focused on the weakest category
+    focused_context = _build_agent_driven_context(
+        harness_result, current_config, harness_name,
+    )
+
     analysis = f"""Benchmark Results for {harness_name} (Iteration {harness_result.iteration}):
 - Aggregate Score: {harness_result.aggregate_score:.1f}/100
 - Category Accuracy: {harness_result.category_accuracy:.0%}
-- Quality Score: {harness_result.avg_quality:.1f}/40
+- Quality Score: {harness_result.avg_quality:.1f}/30
 - Helpfulness Score: {harness_result.avg_helpfulness:.1f}/20
 
 Valid Categories: {', '.join(valid_categories)}
@@ -612,31 +682,41 @@ Category Breakdown:
     for cat, info in breakdown.items():
         analysis += f"  {cat}: avg={info['avg_score']:.1f}, accuracy={info['accuracy']:.0%} ({info['total']} cases)\n"
 
-    analysis += "\nWeakest Cases:\n"
-    for r in weak_cases:
-        analysis += f"  Case {r.case_id}: \"{r.query[:50]}\" score={r.score['total_score']}, "
-        analysis += f"expected={r.expected_category}, got={r.actual_category}\n"
-        analysis += f"    Judge: {r.score.get('reasoning', '')[:100]}\n"
+    analysis += f"\n{focused_context}"
 
-    prompt = f"""You are an AI workflow optimizer. Analyze these {harness_name.replace('_', ' ')} DAG benchmark results
-and propose specific, actionable improvements to the DAG configuration.
+    prompt = f"""You are an AI workflow optimizer specializing in ADDITIVE instruction improvement.
+Analyze these {harness_name.replace('_', ' ')} DAG benchmark results.
 
 {analysis}
 
-Current DAG config (YAML nodes):
-{yaml.dump({'nodes': current_config['nodes']}, default_flow_style=False)}
+IMPORTANT RULES:
+1. You must NOT rewrite handler instructions from scratch
+2. You must ONLY propose ADDITIONS to append to the existing handler instructions
+3. Focus on the weakest category shown above
 
-Propose 2-3 specific improvements. Focus on:
-1. Improving the classifier instruction to reduce misclassifications
-2. Making handler instructions more specific to address quality gaps
-3. Adding detail to handler instructions for poorly-scoring categories
+Propose 2-3 specific TEMPLATE ADDITIONS to append to the weakest handler. Each addition should be one of:
 
-For each proposal, explain:
-- What to change
-- Why (based on the data)
-- Expected impact
+TYPE A - Issue-specific template:
+  A step-by-step template for a specific sub-issue that weak cases reveal.
+  Example: "For SCREEN FLICKERING: 1. Check refresh rate... 2. Update driver..."
 
-Reply with a numbered list of proposals. Be specific about instruction text changes."""
+TYPE B - Domain knowledge injection:
+  Concrete, realistic details like server names, URLs, IP addresses, specific
+  commands, tool names, or policy details that make responses more actionable.
+  Example: "KNOWLEDGE BASE: VPN server: vpn.company.com, DNS: 10.0.0.53..."
+
+TYPE C - Quality criteria hint:
+  A brief instruction that directly addresses what the judge is looking for
+  in the weak cases (based on the quality criteria and judge reasoning).
+  Example: "ALWAYS mention signal strength diagnosis and band switching for Wi-Fi issues."
+
+For each proposal, specify:
+- TYPE (A, B, or C)
+- The exact text to APPEND to the handler instruction
+- Which handler node it applies to
+- Why (referencing specific weak cases)
+
+Reply with a numbered list. Be specific and concrete."""
 
     await asyncio.sleep(LLM_DELAY)
     resp = client.models.generate_content(
@@ -667,70 +747,120 @@ async def generate_improved_dag(
     iteration: int,
     harness_name: str,
 ) -> dict:
-    """Generate an improved DAG YAML config based on proposals."""
-    current_yaml = yaml.dump({"dag": current_config}, default_flow_style=False)
+    """Generate an improved DAG config by APPENDING templates to handler instructions.
+
+    Key difference from the original: we do NOT ask the LLM to rewrite the full
+    config. Instead, we ask it to extract the text to append, then we do the
+    appending ourselves programmatically. This preserves the base instruction
+    and only adds specificity (Sprint D finding: additive > rewrite).
+
+    Fallback: if extraction fails, we fall back to programmatic append of the
+    raw proposals text onto the weakest handler.
+    """
     valid_categories = extract_categories_from_config(current_config)
 
-    prompt = f"""You are a workflow configuration generator. Apply the following improvement
-proposals to the {harness_name.replace('_', ' ')} DAG configuration.
+    # Identify the weakest handler from the proposals (they reference it)
+    proposals_text = "\n".join(proposals)
 
-CURRENT CONFIG:
-```yaml
-{current_yaml}
-```
+    # Step 1: Ask the LLM to extract structured additions from the proposals
+    extract_prompt = f"""You are a precise text extractor. Given the improvement proposals below,
+extract the text that should be APPENDED to handler node instructions.
 
-IMPROVEMENT PROPOSALS:
-{chr(10).join(proposals)}
+PROPOSALS:
+{proposals_text}
 
-Generate the complete updated YAML config with these changes applied.
-Rules:
-- Keep all existing node IDs unless renaming is necessary
-- Update instructions to be more specific and detailed based on proposals
-- Keep the same edge structure unless adding new nodes/routes
-- Keep model as gemini-3.5-flash for all nodes
-- Update the version to "2.0.{iteration}"
-- Keep nodes of type 'agent' only
-- IMPORTANT: Keep the classify node's instruction format so it outputs
-  ONLY one of: {', '.join(valid_categories)}
-- All edges from classify must use conditions: {', '.join(valid_categories)}
+CURRENT HANDLER NODE IDs: {', '.join(n['id'] for n in current_config['nodes'] if n['id'] != 'classify')}
 
-Reply with ONLY the YAML (no markdown code blocks, no explanation).
-Start with "dag:" on the first line."""
+For each proposal, output a JSON object with:
+- "node_id": which handler node to append to (must be one of the node IDs above)
+- "append_text": the exact text to append to that node's instruction
+
+Output a JSON array of these objects. No markdown, no explanation.
+Example: [{{"node_id": "handle_network", "append_text": "\\nFor VPN issues:\\n1. Check credentials..."}}]"""
 
     await asyncio.sleep(LLM_DELAY)
-    resp = client.models.generate_content(
-        model=JUDGE_MODEL,
-        contents=[{"role": "user", "parts": [{"text": prompt}]}],
-    )
-    yaml_text = resp.candidates[0].content.parts[0].text.strip()
-
-    # Strip markdown code blocks if present
-    if "```" in yaml_text:
-        lines = yaml_text.split("\n")
-        in_block = False
-        block_lines = []
-        for line in lines:
-            if line.strip().startswith("```"):
-                if in_block:
-                    break
-                in_block = True
-                continue
-            if in_block:
-                block_lines.append(line)
-        if block_lines:
-            yaml_text = "\n".join(block_lines)
-
     try:
-        parsed = yaml.safe_load(yaml_text)
-        if parsed is None:
-            raise yaml.YAMLError("Parsed YAML is empty/None")
-        dag = parsed.get("dag", parsed) if isinstance(parsed, dict) else parsed
-        _validate_dag_config(dag, harness_name)
-        return dag
-    except (yaml.YAMLError, ValueError) as e:
-        logger.error("Failed to parse/validate generated YAML for %s: %s", harness_name, e)
-        logger.error("Raw YAML:\n%s", yaml_text[:500])
-        raise
+        resp = client.models.generate_content(
+            model=JUDGE_MODEL,
+            contents=[{"role": "user", "parts": [{"text": extract_prompt}]}],
+            config={"temperature": 0.0},
+        )
+        extract_text = resp.candidates[0].content.parts[0].text.strip()
+
+        # Parse JSON
+        if "```" in extract_text:
+            match = re.search(r"```(?:json)?\s*(.*?)```", extract_text, re.DOTALL)
+            if match:
+                extract_text = match.group(1).strip()
+
+        # Try to find JSON array
+        json_match = re.search(r'\[.*\]', extract_text, re.DOTALL)
+        if json_match:
+            extract_text = json_match.group(0)
+
+        additions = json.loads(extract_text)
+        if not isinstance(additions, list):
+            additions = [additions]
+
+    except (json.JSONDecodeError, Exception) as e:
+        logger.warning("Failed to extract structured additions: %s. Using fallback.", e)
+        # Fallback: find the weakest handler and append raw proposal text
+        handler_ids = [n["id"] for n in current_config["nodes"] if n["id"] != "classify"]
+        # Try to identify the target handler from proposals text
+        target_handler = handler_ids[0]  # default to first
+        for hid in handler_ids:
+            if hid in proposals_text.lower() or hid.replace("handle_", "") in proposals_text.lower():
+                target_handler = hid
+                break
+
+        # Clean the proposals into a reasonable append block
+        additions = [{
+            "node_id": target_handler,
+            "append_text": "\n\nADDITIONAL GUIDANCE (from optimization):\n" + proposals_text[:1500],
+        }]
+
+    # Step 2: Apply additions to a deep copy of the current config
+    new_config = copy.deepcopy(current_config)
+    new_config["version"] = f"2.0.{iteration}"
+
+    nodes_by_id = {n["id"]: n for n in new_config["nodes"]}
+    applied_count = 0
+
+    for addition in additions:
+        node_id = addition.get("node_id", "")
+        append_text = addition.get("append_text", "")
+
+        if not node_id or not append_text:
+            continue
+
+        # Find the node (try exact match, then fuzzy)
+        target_node = nodes_by_id.get(node_id)
+        if target_node is None:
+            # Fuzzy match
+            for nid, node in nodes_by_id.items():
+                if node_id in nid or nid in node_id:
+                    target_node = node
+                    break
+
+        if target_node is None or target_node["id"] == "classify":
+            continue  # Don't modify the classifier
+
+        # Append the text to the instruction, preserving the base
+        current_instruction = target_node.get("instruction", "")
+        # Prevent instruction from growing unboundedly
+        if len(current_instruction) + len(append_text) > 4000:
+            append_text = append_text[:4000 - len(current_instruction)]
+
+        target_node["instruction"] = current_instruction.rstrip() + "\n\n" + append_text.strip() + "\n"
+        applied_count += 1
+
+    if applied_count == 0:
+        logger.warning("No additions were applied to %s config. Returning original.", harness_name)
+        new_config["version"] = f"2.0.{iteration}"
+
+    # Validate the result
+    _validate_dag_config(new_config, harness_name)
+    return new_config
 
 
 def _validate_dag_config(config: dict, harness_name: str) -> None:
