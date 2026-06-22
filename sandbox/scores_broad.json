@@ -1,0 +1,858 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 86.16,
+          "holdout_score": 88.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.42,
+          "holdout_score": 84.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 77.21,
+          "holdout_score": 78.91,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8421
+        },
+        "healthcare_triage": {
+          "train_score": 84.42,
+          "holdout_score": 89.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 88.37,
+          "holdout_score": 88.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 74.95,
+          "holdout_score": 75.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity",
+      "train_aggregate": 82.75,
+      "holdout_aggregate": 84.29
+    },
+    {
+      "iteration": 2,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 85.16,
+          "holdout_score": 86.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 84.53,
+          "holdout_score": 86.27,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 82.0,
+          "holdout_score": 82.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 86.58,
+          "holdout_score": 89.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 88.47,
+          "holdout_score": 88.45,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 80.11,
+          "holdout_score": 79.0,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity(rej)",
+      "train_aggregate": 84.47,
+      "holdout_aggregate": 85.35
+    },
+    {
+      "iteration": 3,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 84.58,
+          "holdout_score": 86.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.63,
+          "holdout_score": 85.0,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 82.63,
+          "holdout_score": 83.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 85.21,
+          "holdout_score": 86.64,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 90.11,
+          "holdout_score": 89.91,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 80.16,
+          "holdout_score": 76.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "templates",
+      "train_aggregate": 84.72,
+      "holdout_aggregate": 84.73
+    },
+    {
+      "iteration": 4,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 84.89,
+          "holdout_score": 86.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 84.79,
+          "holdout_score": 84.45,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 83.47,
+          "holdout_score": 88.0,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 85.0,
+          "holdout_score": 87.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 88.68,
+          "holdout_score": 89.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 80.37,
+          "holdout_score": 77.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity",
+      "train_aggregate": 84.54,
+      "holdout_aggregate": 85.48
+    },
+    {
+      "iteration": 5,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 83.63,
+          "holdout_score": 88.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.32,
+          "holdout_score": 86.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 82.47,
+          "holdout_score": 89.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 86.53,
+          "holdout_score": 87.45,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 90.68,
+          "holdout_score": 90.64,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 84.89,
+          "holdout_score": 80.64,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "knowledge(rej)",
+      "train_aggregate": 85.59,
+      "holdout_aggregate": 87.2
+    },
+    {
+      "iteration": 6,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 83.26,
+          "holdout_score": 84.91,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.89,
+          "holdout_score": 87.09,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 85.26,
+          "holdout_score": 87.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 84.74,
+          "holdout_score": 89.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 88.68,
+          "holdout_score": 87.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 85.79,
+          "holdout_score": 84.0,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity(rej)",
+      "train_aggregate": 85.61,
+      "holdout_aggregate": 86.8
+    },
+    {
+      "iteration": 7,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 84.0,
+          "holdout_score": 88.27,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.95,
+          "holdout_score": 83.55,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 82.84,
+          "holdout_score": 84.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 85.21,
+          "holdout_score": 85.91,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 90.42,
+          "holdout_score": 89.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 86.37,
+          "holdout_score": 82.45,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "templates(rej)",
+      "train_aggregate": 85.8,
+      "holdout_aggregate": 85.79
+    },
+    {
+      "iteration": 8,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 84.37,
+          "holdout_score": 89.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.11,
+          "holdout_score": 87.55,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 82.68,
+          "holdout_score": 85.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 85.05,
+          "holdout_score": 90.55,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 90.63,
+          "holdout_score": 91.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 85.16,
+          "holdout_score": 81.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "knowledge(rej)",
+      "train_aggregate": 85.5,
+      "holdout_aggregate": 87.74
+    },
+    {
+      "iteration": 9,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 83.68,
+          "holdout_score": 89.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.68,
+          "holdout_score": 88.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 84.11,
+          "holdout_score": 79.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 86.16,
+          "holdout_score": 88.0,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 88.58,
+          "holdout_score": 91.18,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 84.63,
+          "holdout_score": 81.09,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 3,
+      "winner_strategy": "clarity(rej)",
+      "train_aggregate": 85.47,
+      "holdout_aggregate": 86.33
+    },
+    {
+      "iteration": 10,
+      "harnesses": {
+        "customer_support": {
+          "train_score": 84.42,
+          "holdout_score": 85.45,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "it_helpdesk": {
+          "train_score": 85.89,
+          "holdout_score": 88.36,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "sales_inquiry": {
+          "train_score": 84.0,
+          "holdout_score": 85.64,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.8947
+        },
+        "healthcare_triage": {
+          "train_score": 86.11,
+          "holdout_score": 88.82,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "ecommerce_support": {
+          "train_score": 89.53,
+          "holdout_score": 87.73,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 1.0
+        },
+        "legal_intake": {
+          "train_score": 85.84,
+          "holdout_score": 82.09,
+          "train_cases": 19,
+          "holdout_cases": 11,
+          "category_accuracy": 0.9474
+        }
+      },
+      "hypotheses_tested": 0,
+      "winner_strategy": null,
+      "train_aggregate": 85.96,
+      "holdout_aggregate": 86.35
+    }
+  ],
+  "insights": [
+    {
+      "iteration": 1,
+      "harness": "legal_intake",
+      "strategy": "clarity",
+      "description": "clarity on legal_intake",
+      "train_delta": 3.95,
+      "holdout_delta": 1.59,
+      "accepted": true
+    },
+    {
+      "iteration": 1,
+      "harness": "legal_intake",
+      "strategy": "templates",
+      "description": "templates on legal_intake",
+      "train_delta": 1.89,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 1,
+      "harness": "legal_intake",
+      "strategy": "knowledge",
+      "description": "knowledge on legal_intake",
+      "train_delta": 1.68,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 2,
+      "harness": "legal_intake",
+      "strategy": "clarity",
+      "description": "clarity on legal_intake",
+      "train_delta": 4.26,
+      "holdout_delta": -2.77,
+      "accepted": false
+    },
+    {
+      "iteration": 2,
+      "harness": "legal_intake",
+      "strategy": "templates",
+      "description": "templates on legal_intake",
+      "train_delta": 1.95,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 2,
+      "harness": "legal_intake",
+      "strategy": "knowledge",
+      "description": "knowledge on legal_intake",
+      "train_delta": 1.79,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 3,
+      "harness": "legal_intake",
+      "strategy": "templates",
+      "description": "templates on legal_intake",
+      "train_delta": 2.79,
+      "holdout_delta": 3.55,
+      "accepted": true
+    },
+    {
+      "iteration": 3,
+      "harness": "legal_intake",
+      "strategy": "clarity",
+      "description": "clarity on legal_intake",
+      "train_delta": 2.11,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 3,
+      "harness": "legal_intake",
+      "strategy": "knowledge",
+      "description": "knowledge on legal_intake",
+      "train_delta": -0.21,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 4,
+      "harness": "legal_intake",
+      "strategy": "clarity",
+      "description": "clarity on legal_intake",
+      "train_delta": 6.53,
+      "holdout_delta": 6.14,
+      "accepted": true
+    },
+    {
+      "iteration": 4,
+      "harness": "legal_intake",
+      "strategy": "knowledge",
+      "description": "knowledge on legal_intake",
+      "train_delta": 5.47,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 4,
+      "harness": "legal_intake",
+      "strategy": "templates",
+      "description": "templates on legal_intake",
+      "train_delta": 4.74,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 5,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge on sales_inquiry",
+      "train_delta": 2.37,
+      "holdout_delta": -1.32,
+      "accepted": false
+    },
+    {
+      "iteration": 5,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity on sales_inquiry",
+      "train_delta": 1.32,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 5,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates on sales_inquiry",
+      "train_delta": -3.42,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 6,
+      "harness": "customer_support",
+      "strategy": "clarity",
+      "description": "clarity on customer_support",
+      "train_delta": 4.63,
+      "holdout_delta": 2.86,
+      "accepted": false
+    },
+    {
+      "iteration": 6,
+      "harness": "customer_support",
+      "strategy": "templates",
+      "description": "templates on customer_support",
+      "train_delta": 2.79,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 6,
+      "harness": "customer_support",
+      "strategy": "knowledge",
+      "description": "knowledge on customer_support",
+      "train_delta": 2.0,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 7,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates on sales_inquiry",
+      "train_delta": 1.63,
+      "holdout_delta": -2.82,
+      "accepted": false
+    },
+    {
+      "iteration": 7,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge on sales_inquiry",
+      "train_delta": -0.26,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 7,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity on sales_inquiry",
+      "train_delta": -1.63,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 8,
+      "harness": "sales_inquiry",
+      "strategy": "knowledge",
+      "description": "knowledge on sales_inquiry",
+      "train_delta": -0.68,
+      "holdout_delta": -3.09,
+      "accepted": false
+    },
+    {
+      "iteration": 8,
+      "harness": "sales_inquiry",
+      "strategy": "clarity",
+      "description": "clarity on sales_inquiry",
+      "train_delta": -1.11,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 8,
+      "harness": "sales_inquiry",
+      "strategy": "templates",
+      "description": "templates on sales_inquiry",
+      "train_delta": -1.16,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 9,
+      "harness": "customer_support",
+      "strategy": "clarity",
+      "description": "clarity on customer_support",
+      "train_delta": 2.47,
+      "holdout_delta": -2.86,
+      "accepted": false
+    },
+    {
+      "iteration": 9,
+      "harness": "customer_support",
+      "strategy": "knowledge",
+      "description": "knowledge on customer_support",
+      "train_delta": 0.47,
+      "holdout_delta": 0.0,
+      "accepted": false
+    },
+    {
+      "iteration": 9,
+      "harness": "customer_support",
+      "strategy": "templates",
+      "description": "templates on customer_support",
+      "train_delta": 0.37,
+      "holdout_delta": 0.0,
+      "accepted": false
+    }
+  ],
+  "promotions": [
+    {
+      "iteration": 1,
+      "target_harness": "legal_intake",
+      "accepted": true,
+      "strategy": "clarity",
+      "holdout_avg": 76.95,
+      "holdout_delta": 1.59,
+      "reason": "NEW_BEST",
+      "train_delta": 3.95
+    },
+    {
+      "iteration": 2,
+      "target_harness": "legal_intake",
+      "accepted": false,
+      "strategy": "clarity",
+      "holdout_avg": 76.23,
+      "holdout_delta": -2.77,
+      "reason": "REGRESSION",
+      "train_delta": 4.26
+    },
+    {
+      "iteration": 3,
+      "target_harness": "legal_intake",
+      "accepted": true,
+      "strategy": "templates",
+      "holdout_avg": 80.36,
+      "holdout_delta": 3.55,
+      "reason": "NEW_BEST",
+      "train_delta": 2.79
+    },
+    {
+      "iteration": 4,
+      "target_harness": "legal_intake",
+      "accepted": true,
+      "strategy": "clarity",
+      "holdout_avg": 83.32,
+      "holdout_delta": 6.14,
+      "reason": "NEW_BEST",
+      "train_delta": 6.53
+    },
+    {
+      "iteration": 5,
+      "target_harness": "sales_inquiry",
+      "accepted": false,
+      "strategy": "knowledge",
+      "holdout_avg": 88.05,
+      "holdout_delta": -1.32,
+      "reason": "REGRESSION",
+      "train_delta": 2.37
+    },
+    {
+      "iteration": 6,
+      "target_harness": "customer_support",
+      "accepted": false,
+      "strategy": "clarity",
+      "holdout_avg": 87.77,
+      "holdout_delta": 2.86,
+      "reason": "REGRESSION",
+      "train_delta": 4.63
+    },
+    {
+      "iteration": 7,
+      "target_harness": "sales_inquiry",
+      "accepted": false,
+      "strategy": "templates",
+      "holdout_avg": 82.0,
+      "holdout_delta": -2.82,
+      "reason": "REGRESSION",
+      "train_delta": 1.63
+    },
+    {
+      "iteration": 8,
+      "target_harness": "sales_inquiry",
+      "accepted": false,
+      "strategy": "knowledge",
+      "holdout_avg": 82.73,
+      "holdout_delta": -3.09,
+      "reason": "REGRESSION",
+      "train_delta": -0.68
+    },
+    {
+      "iteration": 9,
+      "target_harness": "customer_support",
+      "accepted": false,
+      "strategy": "clarity",
+      "holdout_avg": 86.95,
+      "holdout_delta": -2.86,
+      "reason": "REGRESSION",
+      "train_delta": 2.47
+    },
+    {
+      "iteration": 10,
+      "target_harness": null,
+      "accepted": false,
+      "strategy": null,
+      "holdout_delta": 0.0
+    }
+  ]
+}
