@@ -970,7 +970,7 @@ async def run_broad_harness_loop(iterations: int = 10) -> None:
             "iteration": iteration,
             "harnesses": {},
             "hypotheses_tested": 0,
-            "winner_strategy": None,
+            "winner_strategy": "-",
         }
 
         # ---- Step 1: Evaluate all harnesses on TRAINING set ----
