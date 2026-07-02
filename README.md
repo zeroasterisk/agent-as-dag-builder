@@ -1,5 +1,8 @@
 # Graph Gardener (Agent-as-DAG-Builder)
 
+> **⚠️ Personal Hobby Project** — This is an independent, personal project by [Alan Blount](https://github.com/zeroasterisk). It is **not affiliated with, endorsed by, or supported by any employer, company, or organization**. No warranty; use at your own risk.
+
+
 Agents that build and continuously refine their own workflow DAGs. Instead of relying on LLM reasoning for every interaction, Graph Gardener lets agents encode learned patterns as executable YAML-defined workflows. A benchmark-driven learning loop proposes improvements, validates them against regression, and promotes winning configurations through canary deployment.
 
 ## How it works
