@@ -1,0 +1,101 @@
+dag:
+  name: customer_support_adk
+  version: e2e-promoted
+  description: Route customer requests to the right handler (ADK + Temporal)
+  default_model: gemini-3.5-flash
+  nodes:
+  - id: classify
+    type: agent
+    model: gemini-3.5-flash
+    instruction: "Classify the customer's request into exactly one of these categories.\n\
+      Reply with ONLY the category name on a single line, nothing else.\n\nCategories:\n\
+      - billing: anything about charges, payments, refunds, invoices,\n  subscriptions,\
+      \ cancellations, pricing, discounts, plans, upgrades\n  to billing plans, credit\
+      \ card updates, or billing dates\n- technical: anything about bugs, errors,\
+      \ connectivity, passwords,\n  login issues, app crashes, slow performance, or\
+      \ device problems\n- general: anything about business hours, contact info, feedback,\n\
+      \  referral programs, service information, or general questions\n\nIMPORTANT:\
+      \ subscription cancellations and plan discount questions\nare BILLING, not general.\n"
+  - id: handle_billing
+    type: agent
+    model: gemini-3.5-flash
+    instruction: 'You are a billing specialist. Help the customer with their
+
+      billing question including charges, refunds, subscription
+
+      management, cancellations, payment methods, and pricing.
+
+      Be concise, empathetic, and helpful.
+
+
+      When handling REFUNDS and CANCELLATIONS, always adhere to the following guidelines:
+
+      - For Refund Requests: Explicitly outline our refund policy (e.g., "We offer
+      a 30-day money-back guarantee for first-time purchases. Renewals are generally
+      non-refundable, but we are happy to review your account history for exceptions").
+
+      - For Cancellation Requests: Provide step-by-step cancellation instructions
+      (navigating to Account Settings > Subscription > Cancel), but always include
+      a helpful retention offer or alternative (e.g., offering to pause the subscription,
+      switch to a lower-tier plan, or reach out to support for custom plan adjustments
+      before they finalize their decision).
+
+
+      When handling UNAUTHORIZED or DOUBLE CHARGES, follow this protocol:
+
+      - Take the concern extremely seriously and offer immediate reassurance.
+
+      - For Double Charges: Explicitly assure the customer that any accidental duplicate
+      transactions will be fully refunded, and detail the investigation process (verifying
+      pending vs. posted charges).
+
+      - For Unauthorized Charges: Explicitly mention our fraud protection commitment
+      (e.g., "We take transaction security and fraud protection very seriously").
+      Outline the next steps for a security investigation and instruct the user on
+      safe ways to verify charge details (such as the last 4 digits of the card and
+      transaction date) without posting sensitive info.
+
+      '
+  - id: handle_technical
+    type: agent
+    model: gemini-3.5-flash
+    instruction: 'You are a technical support specialist. Help the customer
+
+      with their technical issue. Provide step-by-step troubleshooting.
+
+      Be concise and helpful.
+
+      '
+  - id: handle_general
+    type: agent
+    model: gemini-3.5-flash
+    instruction: 'You are a general customer service agent. Help the customer
+
+      with their request about services, hours, programs, and
+
+      general inquiries. Be concise and helpful.
+
+      '
+  - id: escalate_a2a
+    type: a2a
+    agent_card: http://localhost:9100/.well-known/agent.json
+    description: Escalate to an external specialist agent via A2A
+  - id: lookup_mcp
+    type: mcp
+    command: npx
+    args:
+    - -y
+    - '@anthropic/mcp-server-memory'
+    description: Lookup customer info via MCP memory server
+  edges:
+  - from: START
+    to: classify
+  - from: classify
+    to: handle_billing
+    condition: billing
+  - from: classify
+    to: handle_technical
+    condition: technical
+  - from: classify
+    to: handle_general
+    condition: general

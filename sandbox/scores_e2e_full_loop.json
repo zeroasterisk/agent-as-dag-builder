@@ -1,0 +1,76 @@
+{
+  "domain": "customer_support",
+  "original_config": "customer_support_adk.yaml",
+  "phases": {
+    "score": {
+      "cases": 10,
+      "aggregate_score": 88.1,
+      "category_accuracy": 1.0,
+      "avg_quality": 22.7,
+      "avg_helpfulness": 15.4,
+      "category_breakdown": {
+        "billing": {
+          "avg_score": 88.0,
+          "accuracy": 1.0,
+          "count": 8
+        },
+        "technical": {
+          "avg_score": 88.5,
+          "accuracy": 1.0,
+          "count": 2
+        }
+      },
+      "weak_cases": [
+        {
+          "case_id": 2,
+          "query": "Can I get a refund for last month?",
+          "score": 81,
+          "expected": "billing",
+          "actual": "billing"
+        },
+        {
+          "case_id": 5,
+          "query": "How do I cancel my subscription?",
+          "score": 84,
+          "expected": "billing",
+          "actual": "billing"
+        },
+        {
+          "case_id": 6,
+          "query": "I see an unauthorized charge from your company",
+          "score": 84,
+          "expected": "billing",
+          "actual": "billing"
+        }
+      ]
+    },
+    "propose": {
+      "version": "e2e-proposed",
+      "nodes_modified": [
+        "handle_billing"
+      ]
+    },
+    "validate": {
+      "holdout_cases": 8,
+      "original_score": 89.62,
+      "proposed_score": 88.62,
+      "delta": -1.0,
+      "passed": true
+    },
+    "canary": {
+      "canary_cases": 5,
+      "original_score": 81.4,
+      "proposed_score": 80.0,
+      "delta": -1.4,
+      "above_floor": true,
+      "no_regression": true,
+      "passed": true
+    },
+    "promote": {
+      "promoted_path": "customer_support_adk_e2e_promoted.yaml",
+      "version": "e2e-promoted"
+    }
+  },
+  "outcome": "PROMOTED",
+  "elapsed_seconds": 708.5
+}
