@@ -58,6 +58,16 @@ logger = logging.getLogger("pg_eval")
 SANDBOX_DIR = Path(__file__).parent
 LLM_DELAY = 0.3
 
+# Cheap model used ONLY to synthesize per-query situational guidance from the
+# edge's raw guidance/pitfalls fields (PG Sec 2.2: "guidance LLM" -- a small
+# model that turns the localized subgraph into step-specific text). Using
+# flash-lite here is itself the "well-defined task -> smaller model" pattern:
+# distilling 2 short paragraphs into 2-3 sentences needs no frontier model.
+GUIDANCE_MODEL = "gemini-3.5-flash-lite"
+
+GUIDANCE_MODE_STATIC = "static"       # v1 (prototype 20 original): inject raw text as-is
+GUIDANCE_MODE_GENERATIVE = "generative"  # v2 (PG-faithful): synthesize per-query guidance
+
 HARNESS_DEFS = {
     "customer_support": {
         "baseline": "customer_support_adk.yaml",
@@ -110,11 +120,67 @@ def extract_categories(config: dict) -> list[str]:
     return cats
 
 
-async def run_dag_query(client: genai.Client, config: dict, query: str) -> dict:
+async def synthesize_guidance(
+    client: genai.Client, query: str, guidance: str, pitfalls: str
+) -> str:
+    """PG-faithful 'guidance LLM' (Sec 2.2 of arXiv:2609.09153): given the
+    localized edge's raw guidance/pitfalls plus the ACTUAL query, a small
+    model distills step-specific situational guidance for THIS query --
+    rather than injecting the same static block for every case in the
+    category. This is what prototype-20-v1 (GUIDANCE_MODE_STATIC) got wrong
+    and what caused the -0.99..-4.40 pt regression across all 3 harnesses:
+    static per-category text can steer the model toward generic advice
+    (e.g. "restart the device") that doesn't fit the specific complaint
+    (e.g. "check your spam folder"), matching the paper's own ablation
+    finding that raw/full-graph injection underperforms generative,
+    localized guidance (Table 3).
+    """
+    prompt = f"""You are a routing assistant. A user query has been classified onto an edge
+with the following general guidance and pitfalls for that category:
+
+GENERAL GUIDANCE: {guidance}
+GENERAL PITFALLS TO AVOID: {pitfalls}
+
+USER'S ACTUAL QUERY: "{query}"
+
+In 2-3 sentences, write SITUATIONAL guidance specific to this exact query --
+pick out which parts of the general guidance actually apply here, and note
+anything the general guidance misses for this specific case. Be concrete
+and query-specific, not a restatement of the general guidance verbatim."""
+
+    try:
+        resp = client.models.generate_content(
+            model=GUIDANCE_MODEL,
+            contents=[{"role": "user", "parts": [{"text": prompt}]}],
+            config={"temperature": 0.0},
+        )
+        text = ""
+        for p in resp.candidates[0].content.parts:
+            if hasattr(p, "text") and p.text:
+                text += p.text
+        return text.strip() or guidance
+    except Exception as e:
+        logger.warning("Guidance synthesis failed (%s), falling back to raw guidance", e)
+        return guidance
+
+
+async def run_dag_query(
+    client: genai.Client,
+    config: dict,
+    query: str,
+    guidance_mode: str = GUIDANCE_MODE_STATIC,
+) -> dict:
     """Execute one query through the DAG. If the traversed edge carries
-    `guidance`/`pitfalls`, append them to the handler's prompt (PG-style
-    localized attributed-edge injection). Baseline YAMLs have no such
-    fields, so this is a no-op there -- same code path for both variants.
+    `guidance`/`pitfalls`, inject them into the handler's prompt.
+
+    guidance_mode="static": inject the edge's raw guidance/pitfalls verbatim
+        (prototype-20-v1 behavior -- kept for comparison, this is the mode
+        that regressed vs baseline).
+    guidance_mode="generative": synthesize per-query situational guidance via
+        a small model (GUIDANCE_MODEL) before injecting (PG-faithful, Sec 2.2).
+
+    Baseline YAMLs have no guidance/pitfalls fields, so both modes are a
+    no-op there -- same code path for both variants.
     """
     nodes_by_id = {n["id"]: n for n in config["nodes"]}
     routing = build_routing(config)
@@ -179,10 +245,15 @@ async def run_dag_query(client: genai.Client, config: dict, query: str) -> dict:
                 guidance = route.get("guidance", "")
                 pitfalls = route.get("pitfalls", "")
                 extra = ""
-                if guidance:
-                    extra += f"SITUATIONAL GUIDANCE FOR THIS CASE: {guidance}"
-                if pitfalls:
-                    extra += f"\nAVOID THIS PITFALL: {pitfalls}"
+                if guidance or pitfalls:
+                    if guidance_mode == GUIDANCE_MODE_GENERATIVE:
+                        situational = await synthesize_guidance(client, query, guidance, pitfalls)
+                        extra = f"SITUATIONAL GUIDANCE FOR THIS CASE: {situational}"
+                    else:
+                        if guidance:
+                            extra += f"SITUATIONAL GUIDANCE FOR THIS CASE: {guidance}"
+                        if pitfalls:
+                            extra += f"\nAVOID THIS PITFALL: {pitfalls}"
                 if extra:
                     results["edge_guidance_used"] = extra
                 to_visit.append((route["to"], extra))
@@ -216,11 +287,12 @@ async def run_repetition(
     config_path: Path,
     cases: list[dict],
     rep: int,
+    guidance_mode: str = GUIDANCE_MODE_STATIC,
 ) -> dict:
     config = load_dag_config(config_path)
     records = []
     for case in cases:
-        dag_result = await run_dag_query(client, config, case["query"])
+        dag_result = await run_dag_query(client, config, case["query"], guidance_mode=guidance_mode)
         await asyncio.sleep(LLM_DELAY)
         score = await mh.score_response(
             client,
@@ -262,22 +334,25 @@ async def main_async(args):
     harnesses = [args.harness] if args.harness else list(HARNESS_DEFS.keys())
     all_reps = []
 
+    variant_key = "pg" if args.variant == "pg-generative" else args.variant
+    guidance_mode = GUIDANCE_MODE_GENERATIVE if args.variant == "pg-generative" else GUIDANCE_MODE_STATIC
+
     for harness_name in harnesses:
         hdef = HARNESS_DEFS[harness_name]
-        config_path = SANDBOX_DIR / hdef[args.variant]
+        config_path = SANDBOX_DIR / hdef[variant_key]
         if not config_path.exists():
             print(f"SKIP {harness_name}: {config_path} not found (run edge-attribution step first)")
             continue
         cases = hdef["cases"]
-        print(f"=== {harness_name} ({args.variant}) -- {config_path.name}, {len(cases)} cases x {args.repetitions} reps ===")
+        print(f"=== {harness_name} ({args.variant}) -- {config_path.name}, {len(cases)} cases x {args.repetitions} reps, guidance_mode={guidance_mode} ===")
         for rep in range(1, args.repetitions + 1):
             t0 = time.time()
-            result = await run_repetition(client, harness_name, config_path, cases, rep)
+            result = await run_repetition(client, harness_name, config_path, cases, rep, guidance_mode=guidance_mode)
             elapsed = time.time() - t0
             print(f"  rep {rep}: score={result['aggregate_score']:.1f} accuracy={result['category_accuracy']:.0%} ({elapsed:.0f}s)")
             all_reps.append(result)
 
-    out_path = SANDBOX_DIR / f"pg_eval_{args.variant}.json"
+    out_path = SANDBOX_DIR / f"pg_eval_{args.variant.replace('-', '_')}.json"
     with open(out_path, "w") as f:
         json.dump(all_reps, f, indent=2)
     print(f"\nWrote {len(all_reps)} repetition records to {out_path}")
@@ -298,7 +373,7 @@ async def main_async(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--variant", choices=["baseline", "pg"], required=True)
+    parser.add_argument("--variant", choices=["baseline", "pg", "pg-generative"], required=True)
     parser.add_argument("--repetitions", type=int, default=5)
     parser.add_argument("--harness", choices=list(HARNESS_DEFS.keys()), default=None)
     args = parser.parse_args()
