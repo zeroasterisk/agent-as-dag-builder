@@ -1,0 +1,82 @@
+dag:
+  name: it_helpdesk
+  version: "1.0.0"
+  description: "Route IT helpdesk requests to specialized handlers"
+
+  default_model: gemini-3.8-flash
+
+  nodes:
+    - id: classify
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        Classify the IT helpdesk request into one of these categories.
+        Reply with ONLY the category name, nothing else:
+        - password-reset
+        - software-install
+        - hardware
+        - network
+
+    - id: handle_password_reset
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are an IT helpdesk specialist for password and account access issues.
+        Help the user reset their password, unlock their account, or resolve
+        authentication problems. Provide clear step-by-step instructions.
+        Mention self-service portal options when applicable.
+        Be concise and helpful.
+
+    - id: handle_software_install
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are an IT helpdesk specialist for software installation and licensing.
+        Help the user install, update, or troubleshoot software applications.
+        Mention the company software catalog or approval process when relevant.
+        Provide clear steps and mention any prerequisites.
+        Be concise and helpful.
+
+    - id: handle_hardware
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are an IT helpdesk specialist for hardware issues.
+        Help the user diagnose and resolve hardware problems with laptops,
+        desktops, monitors, printers, and peripherals. Suggest basic
+        troubleshooting first, then escalation to on-site support if needed.
+        Be concise and helpful.
+
+    - id: handle_network
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are an IT helpdesk specialist for network and connectivity issues.
+        Help the user resolve VPN, Wi-Fi, ethernet, DNS, and general
+        network connectivity problems. Provide step-by-step troubleshooting.
+        Mention common fixes like flushing DNS, resetting network adapter,
+        or reconnecting to VPN. Be concise and helpful.
+
+  edges:
+    - from: START
+      to: classify
+    - from: classify
+      to: handle_password_reset
+      condition: "password-reset"
+      guidance: "Confirm the user's identity through an approved channel (employee ID, manager verification, or MFA challenge) before issuing any reset. Prefer directing the user to the self-service password portal or SSPR flow first, and only walk through a manual admin-assisted reset if self-service is unavailable or the account is locked. If the account shows repeated failed logins, treat it as a possible compromise and note that the credential should be rotated, not just unlocked."
+      pitfalls: "Do not reset or unlock an account without verifying identity first, since password-reset requests are a common social-engineering and account-takeover vector; also avoid reading back or transmitting the new password in plaintext over chat or email."
+    - from: classify
+      to: handle_software_install
+      condition: "software-install"
+      guidance: "Check whether the requested application is already in the approved software catalog before giving install steps; if it requires a license or elevated/admin rights, route through the standard approval or procurement workflow instead of granting local admin ad hoc. Note the user's OS and whether they're on a managed device, since install steps differ for managed (MDM/SCCM/Intune) vs. unmanaged machines."
+      pitfalls: "Do not instruct users to download installers from unofficial third-party sites or to bypass license/approval controls just to get a faster fix, and don't assume every user has local admin rights to self-install."
+    - from: classify
+      to: handle_hardware
+      condition: "hardware"
+      guidance: "Start with quick physical/basic checks (cables, power, reseating peripherals, reboot) before assuming component failure, and ask about warranty status and asset tag to determine whether in-house swap or vendor RMA applies. If the issue affects a shared device (e.g., a floor printer), flag potential wider impact and prioritize accordingly."
+      pitfalls: "Don't jump straight to hardware replacement or on-site dispatch without first ruling out simple driver, cable, or configuration issues, which wastes technician time and delays resolution for what could be a two-minute fix."
+    - from: classify
+      to: handle_network
+      condition: "network"
+      guidance: "Distinguish between local connectivity issues (Wi-Fi adapter, cable, local DNS cache) and broader outages (VPN gateway, corporate DNS, ISP) by asking whether other users/services are also affected before troubleshooting the single device. Walk through standard steps in order: verify physical/Wi-Fi connection, flush DNS, reset the network adapter, then reconnect VPN or reboot the router if applicable."
+      pitfalls: "Avoid treating every connectivity complaint as a local device problem when it may be a known site-wide or VPN gateway outage; check for existing incident reports before spending time on individual device troubleshooting."

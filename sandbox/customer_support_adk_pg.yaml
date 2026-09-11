@@ -1,0 +1,123 @@
+# Customer Support DAG -- ADK Temporal edition
+# Node types: agent, a2a, mcp
+dag:
+  name: customer_support_adk
+  version: "2.0.0"
+  description: "Route customer requests to the right handler (ADK + Temporal)"
+
+  # Default model for agent nodes (can be overridden per-node)
+  default_model: gemini-3.8-flash
+
+  nodes:
+    - id: classify
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        Classify the customer's request into exactly one of these categories.
+        Reply with ONLY the category name on a single line, nothing else.
+
+        Categories:
+        - billing: anything about charges, payments, refunds, invoices,
+          subscriptions, cancellations, pricing, discounts, plans, upgrades
+          to billing plans, credit card updates, or billing dates
+        - technical: anything about bugs, errors, connectivity, passwords,
+          login issues, app crashes, slow performance, or device problems
+        - general: anything about business hours, contact info, feedback,
+          referral programs, service information, or general questions
+
+        IMPORTANT: subscription cancellations and plan discount questions
+        are BILLING, not general.
+
+    - id: handle_billing
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are a billing specialist. Help the customer with their
+        billing question including charges, refunds, subscription
+        management, cancellations, payment methods, and pricing.
+        Be concise, empathetic, and helpful.
+
+    - id: handle_technical
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are a technical support specialist. Help the customer
+        with their technical issue. Provide step-by-step troubleshooting.
+        Be concise and helpful.
+
+    - id: handle_general
+      type: agent
+      model: gemini-3.8-flash
+      instruction: |
+        You are a general customer service agent. Help the customer
+        with their request about services, hours, programs, and
+        general inquiries. Be concise and helpful.
+
+    # -- A2A node example (inactive by default) --
+    # Delegates to an external A2A agent.  The remote agent must expose
+    # /.well-known/agent.json (or a path you specify in `agent_card`).
+    - id: escalate_a2a
+      type: a2a
+      agent_card: "http://localhost:9100/.well-known/agent.json"
+      description: "Escalate to an external specialist agent via A2A"
+
+    # -- MCP node example (inactive by default) --
+    # Calls a tool exposed by an MCP server.
+    - id: lookup_mcp
+      type: mcp
+      command: "npx"
+      args: ["-y", "@anthropic/mcp-server-memory"]
+      description: "Lookup customer info via MCP memory server"
+
+  edges:
+    - from: START
+      to: classify
+    - from: classify
+      to: handle_billing
+      condition: "billing"
+      guidance: >
+        The customer's request has been classified as billing-related, so
+        treat charges, invoices, subscriptions, and payment details as
+        sensitive and specific to their account. Pull up or reference exact
+        amounts, dates, and plan names where possible rather than speaking
+        in generalities, and acknowledge any financial frustration before
+        moving to resolution steps.
+      pitfalls: >
+        Do not promise a specific refund amount, waived fee, or guaranteed
+        approval before the action is actually confirmed processed --
+        commit only to next steps you can verify, not outcomes you can't.
+    - from: classify
+      to: handle_technical
+      condition: "technical"
+      guidance: >
+        The customer's request has been classified as technical, so lead
+        with structured, step-by-step troubleshooting starting from the
+        simplest likely fix (restart, re-login, clear cache/update app)
+        before escalating to deeper diagnostics. Ask clarifying questions
+        about device, OS/app version, and error messages if they weren't
+        already provided.
+      pitfalls: >
+        Do not assert a root cause (e.g. "this is a server outage" or "your
+        device is incompatible") without evidence from the conversation --
+        unverified technical claims can send the customer down the wrong
+        path or set false expectations about a fix.
+    - from: classify
+      to: handle_general
+      condition: "general"
+      guidance: >
+        The customer's request has been classified as general, so keep the
+        answer factual and pointed -- business hours, contact channels,
+        referral/loyalty program mechanics, or service overviews. If the
+        question brushes up against billing (e.g. plan discounts) redirect
+        to the appropriate flow rather than answering from assumption.
+      pitfalls: >
+        Do not invent specific facts (exact hours, program terms, contact
+        numbers) that weren't provided in context -- for general inquiries
+        it's better to give a verified answer or point to an authoritative
+        source than to fabricate a confident-sounding detail.
+    # Uncomment to wire A2A / MCP nodes into the graph:
+    # - from: handle_billing
+    #   to: escalate_a2a
+    #   condition: "escalate"
+    # - from: handle_technical
+    #   to: lookup_mcp
