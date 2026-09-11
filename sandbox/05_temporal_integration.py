@@ -37,7 +37,7 @@ async def classify_request(query: str) -> ClassifyResult:
     """Classify a customer request using Gemini."""
     client = genai.Client(vertexai=True, project="alanblount-demo", location="global")
     response = client.models.generate_content(
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=[{
             "role": "user",
             "parts": [{"text": f"Classify this customer request into one word (billing/technical/general): {query}"}],
@@ -57,7 +57,7 @@ async def handle_billing(query: str) -> str:
     """Handle a billing request using Gemini."""
     client = genai.Client(vertexai=True, project="alanblount-demo", location="global")
     response = client.models.generate_content(
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=[{
             "role": "user",
             "parts": [{"text": f"You are a billing specialist. Help briefly with: {query}"}],
@@ -71,7 +71,7 @@ async def handle_technical(query: str) -> str:
     """Handle a technical request using Gemini."""
     client = genai.Client(vertexai=True, project="alanblount-demo", location="global")
     response = client.models.generate_content(
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=[{
             "role": "user",
             "parts": [{"text": f"You are a tech support specialist. Help briefly with: {query}"}],
@@ -85,7 +85,7 @@ async def handle_general(query: str) -> str:
     """Handle a general request using Gemini."""
     client = genai.Client(vertexai=True, project="alanblount-demo", location="global")
     response = client.models.generate_content(
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=[{
             "role": "user",
             "parts": [{"text": f"You are a customer service agent. Help briefly with: {query}"}],

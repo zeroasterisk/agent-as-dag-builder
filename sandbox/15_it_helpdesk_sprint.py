@@ -43,7 +43,7 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(mes
 logger = logging.getLogger("it_helpdesk_sprint")
 
 SANDBOX_DIR = Path(__file__).parent
-JUDGE_MODEL = "gemini-3.5-flash"
+JUDGE_MODEL = "gemini-3.8-flash"
 SCORES_FILE = SANDBOX_DIR / "scores_it_helpdesk_sprint.json"
 LLM_DELAY = 0.3
 
@@ -104,12 +104,12 @@ IT_HELPDESK_CASES = [
 CONTROL_CONFIG = {
     "name": "it_helpdesk_control",
     "version": "1.0.0",
-    "default_model": "gemini-3.5-flash",
+    "default_model": "gemini-3.8-flash",
     "nodes": [
         {
             "id": "classify",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "Classify the IT helpdesk request into one of these categories.\n"
                 "Reply with ONLY the category name, nothing else:\n"
@@ -122,7 +122,7 @@ CONTROL_CONFIG = {
         {
             "id": "handle_password_reset",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for password and account access issues.\n"
                 "Help the user reset their password, unlock their account, or resolve\n"
@@ -134,7 +134,7 @@ CONTROL_CONFIG = {
         {
             "id": "handle_software_install",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for software installation and licensing.\n"
                 "Help the user install, update, or troubleshoot software applications.\n"
@@ -146,7 +146,7 @@ CONTROL_CONFIG = {
         {
             "id": "handle_hardware",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for hardware issues.\n"
                 "Help the user diagnose and resolve hardware problems with laptops,\n"
@@ -158,7 +158,7 @@ CONTROL_CONFIG = {
         {
             "id": "handle_network",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for network and connectivity issues.\n"
                 "Help the user resolve VPN, Wi-Fi, ethernet, DNS, and general\n"
@@ -199,12 +199,12 @@ for node in APPROACH_A_CONFIG["nodes"]:
 APPROACH_B_CONFIG = {
     "name": "it_helpdesk_B_twostage",
     "version": "B.1.0",
-    "default_model": "gemini-3.5-flash",
+    "default_model": "gemini-3.8-flash",
     "nodes": [
         {
             "id": "classify",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "Classify the IT helpdesk request into one of these categories.\n"
                 "Reply with ONLY the category name, nothing else:\n"
@@ -218,7 +218,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "triage_password_reset",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk triage specialist for password/account issues.\n"
                 "Quickly assess the user's request and provide:\n"
@@ -232,7 +232,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "handle_password_reset",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for password and account access issues.\n"
                 "Based on the triage assessment, provide a detailed, helpful response.\n"
@@ -246,7 +246,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "triage_software_install",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk triage specialist for software issues.\n"
                 "Quickly assess the user's request and provide:\n"
@@ -260,7 +260,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "handle_software_install",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for software installation and licensing.\n"
                 "Based on the triage assessment, provide a detailed, helpful response.\n"
@@ -273,7 +273,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "triage_hardware",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk triage specialist for hardware issues.\n"
                 "Quickly assess the user's request and provide:\n"
@@ -287,7 +287,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "handle_hardware",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for hardware issues.\n"
                 "Based on the triage assessment, provide a detailed, helpful response.\n"
@@ -301,7 +301,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "triage_network",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk triage specialist for network issues.\n"
                 "Quickly assess the user's request and provide:\n"
@@ -315,7 +315,7 @@ APPROACH_B_CONFIG = {
         {
             "id": "handle_network",
             "type": "agent",
-            "model": "gemini-3.5-flash",
+            "model": "gemini-3.8-flash",
             "instruction": (
                 "You are an IT helpdesk specialist for network and connectivity issues.\n"
                 "Based on the triage assessment, provide a detailed, helpful response.\n"
@@ -597,7 +597,7 @@ async def run_dag_query(
     """Execute a query through the DAG."""
     nodes_by_id = {n["id"]: n for n in config["nodes"]}
     routing = build_routing(config)
-    default_model = config.get("default_model", "gemini-3.5-flash")
+    default_model = config.get("default_model", "gemini-3.8-flash")
     valid_categories = extract_categories_from_config(config)
 
     results = {
@@ -996,7 +996,7 @@ async def main():
     print("=" * 70)
     print(f"Test cases: {len(IT_HELPDESK_CASES)}")
     print(f"Approaches: {len(approaches)}")
-    print(f"Model: gemini-3.5-flash")
+    print(f"Model: gemini-3.8-flash")
     print(f"Judge: {JUDGE_MODEL}")
     print(f"LLM delay: {LLM_DELAY}s")
     est_calls = len(IT_HELPDESK_CASES) * len(approaches) * 3  # classify + handle + 2x judge ~= 3 avg
@@ -1165,7 +1165,7 @@ async def main():
     # ================================================================
     save_data = {
         "experiment": "it_helpdesk_sprint_d",
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "judge_model": JUDGE_MODEL,
         "cases": len(IT_HELPDESK_CASES),
         "approaches": {},

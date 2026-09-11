@@ -6,22 +6,22 @@
 
 ## Hypothesis
 
-Using a less capable model (gemini-3.1-flash-lite) for DAG agents creates more room for the learning loop to improve. The ceiling is lower, so the delta from DAG optimization should be larger than with gemini-2.5-flash.
+Using a less capable model (gemini-3.5-flash-lite) for DAG agents creates more room for the learning loop to improve. The ceiling is lower, so the delta from DAG optimization should be larger than with gemini-3.8-flash.
 
 ## Setup
 
 | Component | Model |
 |-----------|-------|
-| DAG agents (classifier + handlers) | gemini-3.1-flash-lite |
-| Judge/scoring | gemini-2.5-flash |
-| Learning loop (proposals + YAML gen) | gemini-2.5-flash |
+| DAG agents (classifier + handlers) | gemini-3.5-flash-lite |
+| Judge/scoring | gemini-3.8-flash |
+| Learning loop (proposals + YAML gen) | gemini-3.8-flash |
 
 - 58 test cases across 3 harnesses (customer_support: 23, it_helpdesk: 18, sales_inquiry: 17)
 - 5 iterations
 - LLM delay: 0.3s between calls
 - Regression tolerance: 2.0 points
 
-## Results: Flash-Lite (gemini-3.1-flash-lite)
+## Results: Flash-Lite (gemini-3.5-flash-lite)
 
 | Iter | Customer Support | IT Helpdesk | Sales Inquiry | AGGREGATE |
 |------|-----------------|-------------|---------------|-----------|
@@ -34,7 +34,7 @@ Using a less capable model (gemini-3.1-flash-lite) for DAG agents creates more r
 **Total improvement (flash-lite):** +0.5 points over 5 iterations
 **Regression gates triggered:** Iter 2 (it_helpdesk -2.2), Iter 3 (customer_support -2.8, it_helpdesk -4.6)
 
-## Baseline: gemini-2.5-flash (first 5 iterations from earlier run)
+## Baseline: gemini-3.8-flash (first 5 iterations from earlier run)
 
 | Iter | Customer Support | IT Helpdesk | Sales Inquiry | AGGREGATE |
 |------|-----------------|-------------|---------------|-----------|

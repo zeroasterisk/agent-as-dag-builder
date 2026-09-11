@@ -89,7 +89,7 @@ Both approaches use the same Temporal infrastructure. The plugin is a convenienc
 
 Customer service response quality is inherently subjective and context-dependent. A deterministic scorer cannot evaluate whether a response is "empathetic" or "actionable." Human evaluation does not scale and cannot be automated in a learning loop. Self-evaluation creates circular bias.
 
-Using a separate, more capable model (gemini-2.5-flash) as a judge avoids self-evaluation bias. The judge evaluates against explicit quality criteria defined per test case, producing a structured score with reasoning. This is the same pattern used by academic LLM benchmarks (MT-Bench, Arena).
+Using a separate, more capable model (gemini-3.8-flash) as a judge avoids self-evaluation bias. The judge evaluates against explicit quality criteria defined per test case, producing a structured score with reasoning. This is the same pattern used by academic LLM benchmarks (MT-Bench, Arena).
 
 The scoring rubric splits into three dimensions: category accuracy (40 points, deterministic), quality (40 points, LLM-judged), and helpfulness (20 points, LLM-judged). The deterministic component ensures that routing correctness is never subject to judge variance.
 

@@ -53,8 +53,8 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(mes
 logger = logging.getLogger("context_strategies")
 
 SANDBOX_DIR = Path(__file__).parent
-DAG_MODEL = "gemini-3.5-flash"
-JUDGE_MODEL = "gemini-3.5-flash"
+DAG_MODEL = "gemini-3.8-flash"
+JUDGE_MODEL = "gemini-3.8-flash"
 RESULTS_FILE = SANDBOX_DIR / "scores_context_strategies.json"
 
 LLM_DELAY = 0.3
@@ -575,7 +575,7 @@ The YAML must follow this exact schema:
 - dag.nodes: list of agent nodes, each with:
     - id: unique snake_case identifier
     - type: "agent"
-    - model: "gemini-3.5-flash"
+    - model: "gemini-3.8-flash"
     - instruction: detailed instruction string for the agent
 - dag.edges: list of routing edges, each with:
     - from: source node id (or "START")
@@ -591,7 +591,7 @@ Important rules:
 - Handler nodes should be named "handle_<category>" (e.g. handle_billing)
 - Each handler node should have detailed, domain-specific instructions
 - Keep it practical: 3-6 nodes total (1 classifier + 2-5 handlers)
-- All nodes must use model: "gemini-3.5-flash"
+- All nodes must use model: "gemini-3.8-flash"
 
 Example structure (do NOT copy -- generate for the task above):
 dag:
@@ -601,12 +601,12 @@ dag:
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Classify into one of: catA, catB. Reply with ONLY the category name.
     - id: handle_catA
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Handle catA requests...
   edges:

@@ -6,12 +6,12 @@ dag:
   version: "1.0.0"
   description: "Route customer requests with adversarial verification on handler outputs"
 
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.8-flash
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Classify the customer's request into exactly one of these categories.
         Reply with ONLY the category name on a single line, nothing else.
@@ -30,7 +30,7 @@ dag:
 
     - id: handle_billing
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a billing specialist. Help the customer with their
         billing question including charges, refunds, subscription
@@ -39,7 +39,7 @@ dag:
 
     - id: verify_billing
       type: verifier
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       target: handle_billing
       instruction: |
         You are a quality reviewer for billing responses.
@@ -58,7 +58,7 @@ dag:
 
     - id: handle_technical
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a technical support specialist. Help the customer
         with their technical issue. Provide step-by-step troubleshooting.
@@ -66,7 +66,7 @@ dag:
 
     - id: verify_technical
       type: verifier
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       target: handle_technical
       instruction: |
         You are a quality reviewer for technical support responses.
@@ -85,7 +85,7 @@ dag:
 
     - id: handle_general
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a general customer service agent. Help the customer
         with their request about services, hours, programs, and
@@ -93,7 +93,7 @@ dag:
 
     - id: verify_general
       type: verifier
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       target: handle_general
       instruction: |
         You are a quality reviewer for general customer service responses.

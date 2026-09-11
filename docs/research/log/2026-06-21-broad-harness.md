@@ -3,7 +3,7 @@
 **Date:** 2026-06-21 (run completed 2026-06-22)
 **Script:** `sandbox/18_broad_harness.py`
 **Runtime:** ~14 hours
-**Model:** gemini-3.5-flash (Vertex AI)
+**Model:** gemini-3.8-flash (Vertex AI)
 
 ## Experiment Design
 

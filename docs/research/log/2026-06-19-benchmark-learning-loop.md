@@ -23,7 +23,7 @@ Each response is scored on 100 points across three dimensions:
 | Quality | 40 | LLM-as-judge: does the response meet the quality criteria? |
 | Helpfulness | 20 | LLM-as-judge: is the response concise, clear, and actionable? |
 
-The judge model (`gemini-2.5-flash`) evaluates quality and helpfulness independently from the DAG's own execution model, avoiding self-evaluation bias.
+The judge model (`gemini-3.8-flash`) evaluates quality and helpfulness independently from the DAG's own execution model, avoiding self-evaluation bias.
 
 ## Learning loop results
 

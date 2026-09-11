@@ -20,9 +20,9 @@ Adding a "verifier" node that challenges the output of other nodes will catch er
 **Experiment:** Run the same test cases with and without a verifier node. Measure: quality score delta, false positive rate of the verifier.
 
 ### H3: Weaker models expose more learning opportunities
-Using a less capable model (gemini-3.1-flash-lite) creates more room for the learning loop to improve — the ceiling is lower, so the delta from DAG optimization is larger.
+Using a less capable model (gemini-3.5-flash-lite) creates more room for the learning loop to improve — the ceiling is lower, so the delta from DAG optimization is larger.
 
-**Experiment:** Run the same 3-harness benchmark with gemini-3.1-flash-lite instead of gemini-2.5-flash. Compare: baseline scores, improvement rate per iteration, and whether the learning loop compensates for model weakness.
+**Experiment:** Run the same 3-harness benchmark with gemini-3.5-flash-lite instead of gemini-3.8-flash. Compare: baseline scores, improvement rate per iteration, and whether the learning loop compensates for model weakness.
 
 ### H4: Ephemeral-to-durable promotion
 Patterns that repeat 3+ times as ephemeral DAGs should be automatically promoted to durable (persisted) DAGs, capturing learned optimizations.
@@ -31,7 +31,7 @@ Patterns that repeat 3+ times as ephemeral DAGs should be automatically promoted
 
 ## Model Choice
 
-Switching to gemini-3.1-flash-lite for experiments:
+Switching to gemini-3.5-flash-lite for experiments:
 - Faster inference, lower cost per experiment
 - Less capable = more room for DAG optimization to matter
 - If the learning loop can improve a weak model's output via better orchestration, that's a stronger signal than improving an already-capable model

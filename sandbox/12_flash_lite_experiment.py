@@ -1,12 +1,12 @@
 """Prototype 12: Flash-Lite Experiment (H3 Hypothesis Test).
 
-Tests whether a weaker model (gemini-3.1-flash-lite) exposes more learning
+Tests whether a weaker model (gemini-3.5-flash-lite) exposes more learning
 opportunities -- i.e., the learning loop should achieve LARGER improvement
 deltas because the ceiling is lower.
 
-DAG agents: gemini-3.1-flash-lite (the subject under test)
-Judge/scoring: gemini-2.5-flash (reliable scoring)
-Learning loop: gemini-2.5-flash (reliable proposals)
+DAG agents: gemini-3.5-flash-lite (the subject under test)
+Judge/scoring: gemini-3.8-flash (reliable scoring)
+Learning loop: gemini-3.8-flash (reliable proposals)
 
 Usage:
     python sandbox/12_flash_lite_experiment.py                    # Run 5 iterations
@@ -49,8 +49,8 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(mes
 logger = logging.getLogger("flash_lite_experiment")
 
 SANDBOX_DIR = Path(__file__).parent
-JUDGE_MODEL = "gemini-2.5-flash"
-DAG_MODEL = "gemini-3.1-flash-lite"  # Weaker model for DAG agents (H3 hypothesis)
+JUDGE_MODEL = "gemini-3.8-flash"
+DAG_MODEL = "gemini-3.5-flash-lite"  # Weaker model for DAG agents (H3 hypothesis)
 SCORES_FILE = SANDBOX_DIR / "scores_flash_lite.json"
 
 # Rate-limit delay between LLM calls (seconds)
@@ -682,7 +682,7 @@ Rules:
 - Keep all existing node IDs unless renaming is necessary
 - Update instructions to be more specific and detailed based on proposals
 - Keep the same edge structure unless adding new nodes/routes
-- Keep model as gemini-3.1-flash-lite for all nodes
+- Keep model as gemini-3.5-flash-lite for all nodes
 - Update the version to "2.0.{iteration}"
 - Keep nodes of type 'agent' only
 - IMPORTANT: Keep the classify node's instruction format so it outputs
@@ -1245,9 +1245,9 @@ async def main():
     total_cases = sum(len(h["cases"]) for h in HARNESSES)
     print("=" * 70)
     print("Flash-Lite Experiment: H3 Hypothesis Test")
-    print("  DAG model:      gemini-3.1-flash-lite (weaker = more room to improve)")
-    print("  Judge model:    gemini-2.5-flash (reliable scoring)")
-    print("  Learning model: gemini-2.5-flash (reliable proposals)")
+    print("  DAG model:      gemini-3.5-flash-lite (weaker = more room to improve)")
+    print("  Judge model:    gemini-3.8-flash (reliable scoring)")
+    print("  Learning model: gemini-3.8-flash (reliable proposals)")
     print("=" * 70)
     print(f"Harnesses: {len(HARNESSES)}")
     for h in HARNESSES:

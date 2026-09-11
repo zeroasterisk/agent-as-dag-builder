@@ -47,7 +47,7 @@ logger = logging.getLogger("benchmark")
 
 SANDBOX_DIR = Path(__file__).parent
 ORIGINAL_DAG = SANDBOX_DIR / "customer_support_adk.yaml"
-JUDGE_MODEL = "gemini-2.5-flash"
+JUDGE_MODEL = "gemini-3.8-flash"
 # The DAG's own nodes use whatever model the YAML specifies
 
 
@@ -251,7 +251,7 @@ async def run_dag_query(
     """
     nodes_by_id = {n["id"]: n for n in config["nodes"]}
     routing = build_routing(config)
-    default_model = config.get("default_model", "gemini-2.5-flash")
+    default_model = config.get("default_model", "gemini-3.8-flash")
 
     results = {
         "category": "unknown",
@@ -591,7 +591,7 @@ Rules:
 - You may add new nodes (sub-handlers, validators, etc.)
 - Update instructions to be more specific and detailed based on proposals
 - Keep the same edge structure unless adding new nodes/routes
-- Keep model as gemini-2.5-flash for all nodes
+- Keep model as gemini-3.8-flash for all nodes
 - Update the version to "2.0.{iteration}"
 - Keep nodes of type 'agent' only (no a2a or mcp nodes)
 - IMPORTANT: Keep the classify node's instruction format so it outputs

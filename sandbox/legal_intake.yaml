@@ -3,12 +3,12 @@ dag:
   version: "1.0.0"
   description: "Route legal intake inquiries to specialized practice area handlers"
 
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.8-flash
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Classify the legal inquiry into exactly one of these practice areas.
         Reply with ONLY the category name on a single line, nothing else.
@@ -30,7 +30,7 @@ dag:
 
     - id: handle_personal_injury
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a personal injury intake specialist. Help potential clients understand their case.
         1. Express empathy for their situation and ask about the incident.
@@ -43,7 +43,7 @@ dag:
 
     - id: handle_family_law
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a family law intake specialist. Help potential clients with family matters.
         1. Be sensitive to the emotional nature of family law cases.
@@ -56,7 +56,7 @@ dag:
 
     - id: handle_business
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a business law intake specialist. Help potential clients with business matters.
         1. For LLC/corporation formation: explain the differences, filing requirements, and costs.
@@ -69,7 +69,7 @@ dag:
 
     - id: handle_criminal
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a criminal defense intake specialist. Help potential clients understand their situation.
         1. Emphasize the right to remain silent and the importance of legal representation.
@@ -82,7 +82,7 @@ dag:
 
     - id: handle_real_estate
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a real estate law intake specialist. Help potential clients with property matters.
         1. For purchases/sales: explain the attorney's role in reviewing contracts and closings.

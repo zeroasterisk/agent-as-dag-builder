@@ -31,7 +31,7 @@ The YAML config format was extended (`customer_support_adk.yaml`) with three nod
 nodes:
   - id: classify
     type: agent           # ADK Agent with TemporalModel
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     instruction: "..."
 
   - id: escalate_a2a

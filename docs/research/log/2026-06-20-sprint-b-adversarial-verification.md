@@ -16,7 +16,7 @@ Verifier nodes receive the original query AND the handler's response, then outpu
 - REVISE: send back to handler with specific feedback (max 2 loops)
 - REJECT: flag as failed
 
-Model: gemini-3.5-flash for all nodes. Judge: gemini-3.5-flash at temperature=0.
+Model: gemini-3.8-flash for all nodes. Judge: gemini-3.8-flash at temperature=0.
 
 ## Results
 

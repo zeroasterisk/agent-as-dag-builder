@@ -18,9 +18,9 @@ from google.genai import types
 config = {
     "name": "math_workflow",
     "nodes": [
-        {"id": "classify", "type": "agent", "model": "gemini-3.1-flash-lite",
+        {"id": "classify", "type": "agent", "model": "gemini-3.5-flash-lite",
          "instruction": "Classify the math operation. Reply: addition/subtraction/multiplication/division."},
-        {"id": "solve", "type": "agent", "model": "gemini-3.1-flash-lite",
+        {"id": "solve", "type": "agent", "model": "gemini-3.5-flash-lite",
          "instruction": "Solve the math problem. Reply with just the number."},
     ],
     "edges": [

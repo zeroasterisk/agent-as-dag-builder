@@ -1,5 +1,5 @@
 dag:
-  default_model: gemini-3.1-flash-lite
+  default_model: gemini-3.5-flash-lite
   description: Route IT helpdesk requests to specialized handlers (flash-lite experiment)
   edges:
   - from: START
@@ -32,7 +32,7 @@ dag:
       - network
 
       '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_password_reset
     instruction: 'You are an IT helpdesk specialist for password and account access
@@ -55,7 +55,7 @@ dag:
       specifying what information to provide (e.g., username, last known password,
       MFA status, any error messages encountered, and the self-service steps already
       attempted).'
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_software_install
     instruction: 'You are an IT helpdesk specialist for software installation and
@@ -70,7 +70,7 @@ dag:
       Be concise and helpful.
 
       '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_hardware
     instruction: 'You are an IT helpdesk specialist for hardware issues. Guide the
@@ -101,7 +101,7 @@ dag:
       support, providing the necessary information the user should gather before escalation
       (e.g., device serial number, detailed symptoms, results of all performed troubleshooting
       steps).'
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_network
     instruction: 'You are an expert IT helpdesk specialist for all network and connectivity
@@ -130,6 +130,6 @@ dag:
       clearly suggest next steps, including checking system logs, escalating to a
       network administrator, or contacting the ISP, specifying what information to
       provide (e.g., full error messages, results of previous steps).'
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   version: 2.0.5

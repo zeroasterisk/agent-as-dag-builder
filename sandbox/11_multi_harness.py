@@ -57,7 +57,7 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(mes
 logger = logging.getLogger("multi_harness")
 
 SANDBOX_DIR = Path(__file__).parent
-JUDGE_MODEL = "gemini-3.5-flash"
+JUDGE_MODEL = "gemini-3.8-flash"
 SCORES_FILE = SANDBOX_DIR / "scores.json"
 
 # Rate-limit delay between LLM calls (seconds)
@@ -291,7 +291,7 @@ async def run_dag_query(
     """Execute a single query through the DAG and return detailed results."""
     nodes_by_id = {n["id"]: n for n in config["nodes"]}
     routing = build_routing(config)
-    default_model = config.get("default_model", "gemini-3.5-flash")
+    default_model = config.get("default_model", "gemini-3.8-flash")
     valid_categories = extract_categories_from_config(config)
 
     results = {

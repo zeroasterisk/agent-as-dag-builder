@@ -41,7 +41,7 @@ Provides durable execution for production workflows. Each DAG node executes as a
 LLM calls via Google ADK `Agent` objects. When running in Temporal mode, agents use `TemporalModel` which wraps LLM calls as durable activities. In direct mode, agents use plain model name strings.
 
 Each agent node has:
-- A model (e.g., `gemini-3.1-flash-lite`)
+- A model (e.g., `gemini-3.5-flash-lite`)
 - An instruction (the system prompt)
 - Optional tools (function refs, MCP toolsets)
 - Optional output schema constraints

@@ -2,11 +2,11 @@ dag:
   name: legal_intake
   version: 4.0.4-clarity
   description: Route legal intake inquiries to specialized practice area handlers
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.8-flash
   nodes:
   - id: classify
     type: agent
-    model: gemini-3.5-flash
+    model: gemini-3.8-flash
     instruction: "Classify the legal inquiry into exactly one of these practice areas.\n\
       Reply with ONLY the category name on a single line, nothing else.\n\nCategories:\n\
       - personal-injury: car accidents, slip and fall, medical malpractice,\n  workplace\
@@ -22,7 +22,7 @@ dag:
       \ are business, not criminal.\n"
   - id: handle_personal_injury
     type: agent
-    model: gemini-3.5-flash
+    model: gemini-3.8-flash
     instruction: 'You are a personal injury intake specialist. Help potential clients
       understand their case.
 
@@ -82,7 +82,7 @@ dag:
       '
   - id: handle_family_law
     type: agent
-    model: gemini-3.5-flash
+    model: gemini-3.8-flash
     instruction: 'You are a family law intake specialist. Help potential clients with
       family matters.
 
@@ -105,7 +105,7 @@ dag:
       '
   - id: handle_business
     type: agent
-    model: gemini-3.5-flash
+    model: gemini-3.8-flash
     instruction: 'You are a business law intake specialist. Help potential clients
       with business matters.
 
@@ -158,7 +158,7 @@ dag:
       '
   - id: handle_criminal
     type: agent
-    model: gemini-3.5-flash
+    model: gemini-3.8-flash
     instruction: 'You are a criminal defense intake specialist. Help potential clients
       understand their situation.
 
@@ -180,7 +180,7 @@ dag:
       '
   - id: handle_real_estate
     type: agent
-    model: gemini-3.5-flash
+    model: gemini-3.8-flash
     instruction: "You are a real estate law intake specialist. Help potential clients\
       \ with property matters.\n1. For purchases/sales: explain the attorney's role\
       \ in reviewing contracts and closings.\n2. For leases: mention tenant rights\

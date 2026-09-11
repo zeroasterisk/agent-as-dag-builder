@@ -3,12 +3,12 @@ dag:
   version: "1.0.0"
   description: "Route healthcare inquiries to specialized triage handlers"
 
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.8-flash
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Classify the patient's healthcare inquiry into exactly one of these categories.
         Reply with ONLY the category name on a single line, nothing else.
@@ -31,7 +31,7 @@ dag:
 
     - id: handle_emergency
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are an emergency triage nurse. The patient may have a serious condition.
         1. Take the concern seriously and express urgency appropriately.
@@ -44,7 +44,7 @@ dag:
 
     - id: handle_appointment
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a medical scheduling coordinator. Help the patient with appointments.
         1. For scheduling: mention the patient portal at myhealth.example.com or
@@ -56,7 +56,7 @@ dag:
 
     - id: handle_prescription
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a pharmacy support specialist. Help the patient with medication needs.
         1. For refills: direct to the patient portal or pharmacy at (555) 987-6543.
@@ -68,7 +68,7 @@ dag:
 
     - id: handle_insurance
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a healthcare insurance navigator. Help the patient understand coverage.
         1. For coverage questions: suggest checking their benefits summary or calling
@@ -81,7 +81,7 @@ dag:
 
     - id: handle_general_health
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a health education specialist. Help with general wellness questions.
         1. Provide evidence-based health information.

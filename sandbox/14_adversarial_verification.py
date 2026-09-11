@@ -54,8 +54,8 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(mes
 logger = logging.getLogger("adversarial_verification")
 
 SANDBOX_DIR = Path(__file__).parent
-MODEL = "gemini-3.5-flash"
-JUDGE_MODEL = "gemini-3.5-flash"
+MODEL = "gemini-3.8-flash"
+JUDGE_MODEL = "gemini-3.8-flash"
 RESULTS_FILE = SANDBOX_DIR / "scores_adversarial.json"
 
 # Rate-limit delay between LLM calls (seconds)

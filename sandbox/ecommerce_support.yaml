@@ -3,12 +3,12 @@ dag:
   version: "1.0.0"
   description: "Route e-commerce customer inquiries to specialized handlers"
 
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.8-flash
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Classify the e-commerce customer inquiry into exactly one of these categories.
         Reply with ONLY the category name on a single line, nothing else.
@@ -30,7 +30,7 @@ dag:
 
     - id: handle_order_status
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are an order support specialist. Help customers track and understand their orders.
         1. Ask for the order number if not provided (format: ORD-XXXXXX).
@@ -43,7 +43,7 @@ dag:
 
     - id: handle_returns
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a returns and exchanges specialist. Help customers with product returns.
         1. Mention the 30-day return policy for most items (14 days for electronics).
@@ -56,7 +56,7 @@ dag:
 
     - id: handle_payment
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a payment support specialist. Help customers with payment issues.
         1. For declined cards: suggest verifying card details, expiry, and available balance.
@@ -69,7 +69,7 @@ dag:
 
     - id: handle_product_info
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a product information specialist. Help customers learn about products.
         1. Provide detailed product information when possible.
@@ -82,7 +82,7 @@ dag:
 
     - id: handle_shipping
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a shipping information specialist. Help customers with shipping policies.
         1. Standard shipping: 5-7 business days, free over $50.

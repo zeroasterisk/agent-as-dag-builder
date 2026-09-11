@@ -69,7 +69,7 @@ class AgentWithLearning:
             project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             location=os.environ.get("GOOGLE_CLOUD_LOCATION"),
         )
-        self.model = "gemini-3.1-flash-lite"
+        self.model = "gemini-3.5-flash-lite"
         self.tracker = TaxonomyTracker()
         self.existing_dags = {}  # category → YAML config
 
@@ -141,15 +141,15 @@ Output ONLY valid YAML, no explanation. Use this format:
 nodes:
   - id: validate_input
     type: agent
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     instruction: "..."
   - id: handle_{category}
     type: agent
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     instruction: "..."
   - id: validate_response
     type: agent
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     instruction: "..."
 edges:
   - from: START

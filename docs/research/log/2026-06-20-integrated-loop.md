@@ -3,7 +3,7 @@
 **Date:** 2026-06-20
 **Script:** `sandbox/11_multi_harness.py` (modified)
 **Results:** `sandbox/scores.json`
-**Model:** gemini-3.5-flash (all nodes + judge)
+**Model:** gemini-3.8-flash (all nodes + judge)
 
 ## Changes Made
 
@@ -99,7 +99,7 @@ These are classification errors, not handler quality issues. The current system 
 
 ## Architectural Insight
 
-The integrated approach reveals a natural ceiling around 87-88 for same-model (gemini-3.5-flash) systems. The remaining gap to 100 is dominated by:
+The integrated approach reveals a natural ceiling around 87-88 for same-model (gemini-3.8-flash) systems. The remaining gap to 100 is dominated by:
 
 1. **Classification errors** (~3-5 pts lost) -- same model as classifier has inherent ambiguity on boundary cases
 2. **Judge scoring variance** (~2-3 pts noise) -- temperature=0 with 2x averaging still fluctuates

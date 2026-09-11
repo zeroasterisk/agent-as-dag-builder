@@ -29,25 +29,25 @@ async def test_sub_agent_routing():
     """
     billing = LlmAgent(
         name="billing_handler",
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         instruction="You are a billing specialist. Help with the billing issue. Be concise.",
     )
 
     technical = LlmAgent(
         name="technical_handler",
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         instruction="You are a tech support specialist. Help with the technical issue. Be concise.",
     )
 
     general = LlmAgent(
         name="general_handler",
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         instruction="You are a general support agent. Help with the request. Be concise.",
     )
 
     router = LlmAgent(
         name="router",
-        model="gemini-3.1-flash-lite",
+        model="gemini-3.5-flash-lite",
         instruction="""You are a customer service router. Classify the customer's request and
 transfer to the appropriate handler:
 - billing_handler: for billing, payment, charges, subscription issues

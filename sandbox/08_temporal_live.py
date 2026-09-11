@@ -27,7 +27,7 @@ class ClassifyResult:
 
 @activity.defn
 async def classify(query: str) -> ClassifyResult:
-    r = gclient.models.generate_content(model="gemini-3.1-flash-lite",
+    r = gclient.models.generate_content(model="gemini-3.5-flash-lite",
         contents=[{"role": "user", "parts": [{"text": f"One word - billing/technical/general: {query}"}]}])
     t = r.candidates[0].content.parts[0].text.strip().lower()
     return ClassifyResult(
@@ -37,7 +37,7 @@ async def classify(query: str) -> ClassifyResult:
 @activity.defn
 async def handle(args: list) -> str:
     query, category = args
-    r = gclient.models.generate_content(model="gemini-3.1-flash-lite",
+    r = gclient.models.generate_content(model="gemini-3.5-flash-lite",
         contents=[{"role": "user", "parts": [{"text": f"{category} specialist, help briefly: {query}"}]}])
     return r.candidates[0].content.parts[0].text
 

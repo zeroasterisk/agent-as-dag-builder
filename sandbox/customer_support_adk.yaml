@@ -6,12 +6,12 @@ dag:
   description: "Route customer requests to the right handler (ADK + Temporal)"
 
   # Default model for agent nodes (can be overridden per-node)
-  default_model: gemini-3.5-flash
+  default_model: gemini-3.8-flash
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         Classify the customer's request into exactly one of these categories.
         Reply with ONLY the category name on a single line, nothing else.
@@ -30,7 +30,7 @@ dag:
 
     - id: handle_billing
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a billing specialist. Help the customer with their
         billing question including charges, refunds, subscription
@@ -39,7 +39,7 @@ dag:
 
     - id: handle_technical
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a technical support specialist. Help the customer
         with their technical issue. Provide step-by-step troubleshooting.
@@ -47,7 +47,7 @@ dag:
 
     - id: handle_general
       type: agent
-      model: gemini-3.5-flash
+      model: gemini-3.8-flash
       instruction: |
         You are a general customer service agent. Help the customer
         with their request about services, hours, programs, and

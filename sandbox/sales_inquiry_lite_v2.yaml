@@ -1,5 +1,5 @@
 dag:
-  default_model: gemini-3.1-flash-lite
+  default_model: gemini-3.5-flash-lite
   description: Route sales and product inquiries to specialized handlers (flash-lite
     experiment)
   edges:
@@ -24,7 +24,7 @@ dag:
       Consider queries about "free trials" or "trials" as "pricing" inquiries. Reply
       with ONLY the category name, nothing else: - pricing - features - demo-request
       - competitor-comparison '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_pricing
     instruction: 'You are a sales specialist handling pricing inquiries. Help the
@@ -34,21 +34,21 @@ dag:
       to find detailed pricing (e.g., "visit our pricing page at [link]"). Mention
       free trials when relevant. Encourage scheduling a call for custom enterprise
       pricing or for a personalized quote. Be concise, specific, and helpful. '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_features
     instruction: 'You are a product specialist handling feature inquiries. Help the
       customer understand product capabilities including integrations, SSO, API access,
       security features, and platform support. Provide specific details and mention
       which plan tier includes each feature. Be concise and helpful. '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_demo_request
     instruction: 'You are a sales specialist handling demo requests. Help the customer
       schedule a product demonstration. Ask about their use case, team size, and timeline.
       Mention available demo formats (live walkthrough, self-guided trial, recorded
       demo). Provide next steps for booking. Be concise and helpful. '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_competitor_comparison
     instruction: 'You are a sales specialist handling competitive inquiries. Help
@@ -58,6 +58,6 @@ dag:
       language towards competitors throughout the entire response. Offer to provide
       a detailed comparison document or schedule a deeper dive into specific comparison
       points. Be concise, comprehensive, and helpful. '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   version: 2.0.2

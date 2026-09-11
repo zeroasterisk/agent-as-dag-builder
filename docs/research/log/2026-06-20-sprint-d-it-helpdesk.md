@@ -3,7 +3,7 @@
 **Date:** 2026-06-20
 **Script:** `sandbox/15_it_helpdesk_sprint.py`
 **Results:** `sandbox/scores_it_helpdesk_sprint.json`
-**Model:** gemini-3.5-flash (handler + judge)
+**Model:** gemini-3.8-flash (handler + judge)
 
 ## Problem Statement
 

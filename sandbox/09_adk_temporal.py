@@ -116,7 +116,7 @@ def build_adk_agents(
 
     Returns a dict of {node_id: agent_or_wrapper}.
     """
-    default_model = config.get("default_model", "gemini-3.1-flash-lite")
+    default_model = config.get("default_model", "gemini-3.5-flash-lite")
     agents: dict[str, Any] = {}
     mcp_providers: list = []  # collected for worker registration
 

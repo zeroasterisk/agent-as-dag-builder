@@ -3,7 +3,7 @@
 **Date:** 2026-06-21
 **Script:** `sandbox/17_hypothesis_tree.py`
 **Results:** `sandbox/scores_hypothesis_tree.json`
-**Model:** gemini-3.5-flash (all nodes + judge)
+**Model:** gemini-3.8-flash (all nodes + judge)
 **Base:** `sandbox/11_multi_harness.py` (conservative learning loop, 87.7 best)
 
 ## Motivation

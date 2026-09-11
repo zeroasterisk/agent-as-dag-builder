@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **Prototype:** `sandbox/13_ephemeral_dag.py`
-**Model:** gemini-3.5-flash (generation temp=0.3, expert/judge temp=0.0)
+**Model:** gemini-3.8-flash (generation temp=0.3, expert/judge temp=0.0)
 
 ## Concept
 

@@ -18,7 +18,7 @@
 | 9 | 81 | 68 | 78 | 76.0 | NO |
 | 10 | 81 | 67 | 80 | 76.6 | YES |
 
-*Model changed from gemini-2.5-flash to gemini-3.5-flash between iterations 5-6
+*Model changed from gemini-3.8-flash to gemini-3.8-flash between iterations 5-6
 
 ## Key Findings
 

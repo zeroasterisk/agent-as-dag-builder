@@ -1,5 +1,5 @@
 dag:
-  default_model: gemini-3.1-flash-lite
+  default_model: gemini-3.5-flash-lite
   description: Route customer requests to the right handler (flash-lite experiment)
   edges:
   - from: START
@@ -27,7 +27,7 @@ dag:
       \ features or options (e.g., 'upgrade my current plan' if not about pricing\
       \ changes).\n\nIMPORTANT: subscription cancellations and plan discount questions\n\
       are BILLING, not general.\n"
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_billing
     instruction: You are a billing specialist. Help the customer with their billing
@@ -40,7 +40,7 @@ dag:
       follow-up questions or further assistance after providing the primary answer,
       and ensure the customer has all the information they need to proceed with their
       request.
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_technical
     instruction: You are a technical support specialist. Help the customer with their
@@ -55,7 +55,7 @@ dag:
       the customer knows exactly what to do next to resolve their issue. Always conclude
       by asking if further assistance is needed or by clearly stating the next action
       the customer should take, providing all necessary details to proceed.
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   - id: handle_general
     instruction: 'You are a general customer service agent. Help the customer with
@@ -65,6 +65,6 @@ dag:
       or would you prefer to send it via email/form?"). For service information or
       general questions, provide direct and complete answers where possible, or clearly
       guide them to where they can find the information quickly. '
-    model: gemini-3.1-flash-lite
+    model: gemini-3.5-flash-lite
     type: agent
   version: 2.0.5

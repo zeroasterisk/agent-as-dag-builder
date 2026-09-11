@@ -3,12 +3,12 @@ dag:
   version: "1.0.0"
   description: "Route customer requests to the right handler (flash-lite experiment)"
 
-  default_model: gemini-3.1-flash-lite
+  default_model: gemini-3.5-flash-lite
 
   nodes:
     - id: classify
       type: agent
-      model: gemini-3.1-flash-lite
+      model: gemini-3.5-flash-lite
       instruction: |
         Classify the customer's request into exactly one of these categories.
         Reply with ONLY the category name on a single line, nothing else.
@@ -27,7 +27,7 @@ dag:
 
     - id: handle_billing
       type: agent
-      model: gemini-3.1-flash-lite
+      model: gemini-3.5-flash-lite
       instruction: |
         You are a billing specialist. Help the customer with their
         billing question including charges, refunds, subscription
@@ -36,7 +36,7 @@ dag:
 
     - id: handle_technical
       type: agent
-      model: gemini-3.1-flash-lite
+      model: gemini-3.5-flash-lite
       instruction: |
         You are a technical support specialist. Help the customer
         with their technical issue. Provide step-by-step troubleshooting.
@@ -44,7 +44,7 @@ dag:
 
     - id: handle_general
       type: agent
-      model: gemini-3.1-flash-lite
+      model: gemini-3.5-flash-lite
       instruction: |
         You are a general customer service agent. Help the customer
         with their request about services, hours, programs, and
