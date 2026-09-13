@@ -48,11 +48,18 @@ ATIF trajectory file is inspectable and matches what actually happened.
 
 ## Phase 2 — Add the simulated user (real multi-turn)
 
+**Note:** RFC 0002 is status "Draft," and a patch
+(`0002-simulated-users-patch.md`) supersedes its interaction mechanism —
+build against the patch (`acpx` CLI + `--user-agent` flag), not the base
+RFC's `chat`/`--user` (see research.md §3 for the full correction).
+
 1. Study the `tau3-bench` adapter's actual task structure
    (`adapters/tau3-bench/` in the Harbor repo) as the concrete template —
    don't design a simulated-user mechanism from scratch, reuse theirs.
-2. Read RFC 0002 (`rfcs/0002-simulated-users.md`) in full for the intended
-   authoring pattern.
+2. Read RFC 0002 (`rfcs/0002-simulated-users.md`) **and its patch**
+   (`rfcs/0002-simulated-users-patch.md`) in full for the intended
+   authoring pattern — the patch is the current mechanism, the base RFC
+   alone is outdated on the transport layer.
 3. Build a simulated-user persona for GG's ambiguous technical-support
    scenario: a "customer" who, when asked "what device/OS are you using?",
    answers with a specific realistic detail (e.g. "iPhone, iOS 17") rather

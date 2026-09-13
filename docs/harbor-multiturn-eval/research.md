@@ -41,17 +41,19 @@ resets (fresh context per step). Per-step `min_reward` can gate early
 stopping. Trial-level reward aggregates across steps via `mean` or `final`
 strategy.
 
-**(b) ATIF — Agent Trajectory Interchange Format** (RFC 0001, confirmed
-present at `rfcs/0001-trajectory-format.md`, v1.8 per subagent read — file
-existence independently verified via API, content not re-read by me).
+**(b) ATIF — Agent Trajectory Interchange Format** (RFC 0001, status
+**Active**, v1.8 — full text independently re-read by me on 2026-09-13,
+not just the subagent's paraphrase).
 A standardized JSON schema explicitly designed, per its own stated purpose,
 to unify "single-turn tasks and multi-turn conversational interactions."
-Key fields (per subagent's read of the RFC): each step has a `source`
+Key fields (confirmed by direct read): each step has a `source`
 (system/user/agent), `tool_calls`, `observation`, per-step `metrics`
-(including RL-oriented fields: `reward`, `logprobs`), `is_copied_context`
+(token counts, cost, `logprobs`, token IDs — **note: no per-step `reward`
+field exists in ATIF**; reward/scoring lives in rewardkit and the
+trial/job layer, not in the trajectory schema itself), `is_copied_context`
 (context-compression tracking), and `subagent_trajectories` (hierarchical/
 multi-agent delegation — directly relevant to GG's DAG-routed handler
-structure).
+structure, and resolved via a `trajectory_id`, not `session_id`, per v1.7).
 
 **(c) Conversational-agent adapters that already exist** (verified present
 via API listing of `adapters/`): `tau3-bench`, `textarena`, `locomo`,
@@ -60,11 +62,34 @@ via API listing of `adapters/`): `tau3-bench`, `textarena`, `locomo`,
   binary + pass^k reward computed by the official tau2 evaluator over the
   full recorded conversation. **This is structurally identical to GG's
   problem** — a customer-service-style agent that needs to hold a real
-  back-and-forth, not answer in one shot.
-- RFC 0002 (confirmed present: `rfcs/0002-simulated-users.md`, plus a
-  `-patch` variant) defines "simulated users" as a first-class Harbor
-  concept — the mechanism needed to make a fake customer answer "which
-  device are you on?" instead of the conversation ending at turn 1.
+  back-and-forth, not answer in one shot. (README independently read:
+  MIT-licensed, built on `sierra-research/tau2-bench`, 375 tasks across
+  4 domains, ships a Dockerized runtime + MCP sidecar.)
+- RFC 0002 (`rfcs/0002-simulated-users.md`) defines "simulated users" as a
+  Harbor concept — **both RFC 0002 and its patch fully re-read by me,
+  not relayed from the subagent.** Two corrections to flag:
+  1. **RFC 0002's status is "Draft"**, not finalized/merged — treat the
+     mechanism below as a proposal under review, not a settled API.
+  2. **A patch (`0002-simulated-users-patch.md`) supersedes the base
+     RFC's interaction mechanism.** Base RFC 0002 proposes a bespoke
+     `chat "<message>"` CLI wrapper for the user agent to talk to the
+     target agent. The patch replaces this with driving the target
+     through the real **acpx** CLI (an existing third-party ACP client,
+     https://acpx.sh) instead of a hand-rolled wrapper — this was explicit
+     PR review feedback (forcing communication through a custom `chat`
+     tool "risks unnatural model behavior"). The patch also renames the
+     `--user` flag to `--user-agent` (clearer, avoids collision with an
+     existing `harbor job share --user` flag). **Anyone implementing
+     Phase 2 should build against the patch's acpx-based mechanism and
+     `--user-agent` flag, not the base RFC's `chat`/`--user`.**
+  Mechanism (patched version): Harbor generates a per-trial
+  `.acpxrc.json` pinning the target agent + policy (`approve-all`
+  permissions, `quiet` output format), starts `acpx sessions ensure`,
+  then runs the user agent with `acpx prompt "<msg>"` as its only new
+  tool — the user agent's own agentic loop drives the whole conversation
+  turn-by-turn; Harbor does not orchestrate turns itself. This is the
+  mechanism needed to make a fake customer answer "which device are you
+  on?" instead of the conversation ending at turn 1.
 
 **Gap, confirmed real (not hand-waved):** there is no built-in "reward
 asking a good clarifying question" scoring primitive. `trajectory_turn_count`
