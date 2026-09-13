@@ -2,26 +2,37 @@
 
 Status: not started. This is a handoff plan for a fresh session/thread.
 
-## Phase 0 — De-risk the one structural unknown (do this first)
+## Phase 0 — De-risk the one structural unknown ✅ DONE (2026-09-13)
 
-Harbor is Docker/container-first. GG's DAG runner today is a set of Python
-scripts under `sandbox/` calling Vertex AI directly (see
-`sandbox/11_multi_harness.py`, `sandbox/20_procedural_graph_eval.py`).
-Before investing in task/adapter authoring, spike:
+**Result: PASSED.** Full findings in
+`docs/harbor-multiturn-eval/phase0-spike-results.md`. Summary: `harbor
+init` + `harbor run --agent oracle` on a hello-world task scored
+**reward 1.0/1.0** end to end (image build → oracle solution → pytest
+verifier → reward collected to host). No fallback to Inspect AI needed —
+Harbor's container model works fine here.
 
-1. Can `sandbox/customer_support_adk.yaml` + a minimal DAG-execution script
-   run inside a plain Docker container with Vertex AI credentials mounted
-   (ADC file or env-based auth)?
-2. `pip install harbor`, `harbor init --task` to scaffold a trivial task,
-   confirm the CLI and container execution model work in this environment
-   at all before building anything GG-specific.
+Two sandbox-specific (not Harbor-specific, not GG-specific) issues were
+found and fixed, and **must be carried forward into every subsequent
+phase**:
 
-**Exit criteria:** a container that runs one GG DAG query end-to-end and
-prints a response, orchestrated by `harbor run` on a hello-world task.
+1. `~/.cache` isn't writable by the sandbox user → run harbor with
+   `HOME` redirected to a scratch dir containing `.cache/harbor` AND a
+   copy of `~/.docker/cli-plugins/docker-compose` (redirecting `HOME`
+   hides the real compose plugin otherwise).
+2. **Task directories and `harbor run` must live under
+   `/shared/workspace/`, not `/home/node/work/`.** This sandbox's Docker
+   access goes through a separate DinD daemon with its own filesystem;
+   bind mounts (which Harbor's verifier relies on to collect
+   `reward.txt`) silently no-op for any path outside `/shared/workspace/`
+   — including paths that are otherwise real-disk-backed. Using the wrong
+   directory produces a misleading `RewardFileNotFoundError` even when
+   the task/solution/verifier all ran correctly inside the container.
 
-If this spike reveals containerization is expensive (e.g. auth plumbing is
-painful), stop and reconsider Inspect AI (see research.md §5) before
-sinking more time into Harbor specifically.
+Still open for Phase 1 (not yet spiked): whether GG's DAG runner
+(currently `sandbox/` scripts calling Vertex AI directly) needs any
+changes to run headless inside a Docker container with Vertex AI
+credentials mounted (ADC file or env-based auth). Do this as the first
+step of Phase 1, using `/shared/workspace/` per the constraint above.
 
 ## Phase 1 — Wrap GG as a Harbor BaseAgent (single-turn parity)
 
